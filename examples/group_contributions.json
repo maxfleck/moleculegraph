@@ -1,0 +1,12 @@
+{
+	"CH3_alkane": 0.61198,
+	"CH2_amine" : 0.45606,
+	"CH2_alkane": 0.45606,
+	"NH2_amine" : 0.40558,
+	"CH_alcohol": 0.14304,
+	"OH_alcohol": 0.40200,
+	"CH2_alcohol": 1111.40200,
+	"cH_alcohol": 0.0,
+	"cH_amine": 0.0
+
+}

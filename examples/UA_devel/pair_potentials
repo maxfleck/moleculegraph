@@ -1,0 +1,15 @@
+VdW-site        mass(amu)     epsilon/k(K)  sigma(Angstrom)  m(repulsive_Mie-exponent)  cut-off(Angstrom)
+  CH3_alkane     15.035        136.318         3.6034           14                        14.0
+  CH2_alkane     14.027        52.9133         4.04             14                        14.0
+  CH2_amine      14.027        65.4595         3.876            14                        14.0
+  NH2_amine      16.023        130.9191        3.2946           12                        14.0
+coulomb-site    mass(amu)     charge(e)
+
+  cH_amine       0.0           0.34            
+  cN_amine       0.0           -0.85           
+  cC_amine       0.0           0.17            
+
+References
+0) Results from force field optimizer 
+1) TaMie papers ITT 
+2) Start from Siepmann (TraPPe) (99%) and OPLS (1%) 

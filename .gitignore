@@ -1,0 +1,12 @@
+build/
+dist/
+*egg*
+tests/
+devel*
+skizzen/
+.ipynb_checkpoints/
+*__pycache__*
+moleculegraph/__pycache__/
+moleculegraph/__pycache__/*
+moleculegraph/__pycache__/__init__.cpython-38.pyc
+moleculegraph/__pycache__

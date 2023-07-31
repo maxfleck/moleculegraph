@@ -13,7 +13,8 @@ setup(
                       'numpy',
                       'networkx',
                       'rapidfuzz',
-                      'toml'
+                      'toml',
+                      'rdkit'
                       ],
 
     classifiers=[

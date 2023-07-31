@@ -1,7 +1,7 @@
 import numpy as np
 import glob
 import csv
-from rapidfuzz.string_metric import normalized_levenshtein
+from rapidfuzz.distance.Levenshtein import normalized_distance
 import json
 
 """

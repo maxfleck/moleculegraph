@@ -181,4 +181,4 @@ print(molecule.bond_keys)
 CH3_expected = ['[C][C]','[C][H]','[C][H]', '[C][H]', '[H][H]']
 
 tc = unittest.TestCase()
-tc.assertListEqual( sorted( list(molecule.bond_keys) ), sorted( list(CH3_expected) ), "CH2 case xxx lists not equal" 
+tc.assertListEqual( sorted( list(molecule.bond_keys) ), sorted( list(CH3_expected) ), "CH2 case xxx lists not equal" )

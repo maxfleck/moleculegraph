@@ -141,7 +141,7 @@ def get_charge(row,pair_dict):
     keys = list(pair_dict.keys())
     dummy = np.zeros(len(keys))
     for i,key in enumerate(keys):
-        dummy[i] = normalized_levenshtein(row[0][1:],key)
+        dummy[i] = normalized_distance(row[0][1:],key)
     pointer = np.squeeze(np.where( dummy == np.amax(dummy)))
     charge = float(row[2])
     return keys[pointer],charge

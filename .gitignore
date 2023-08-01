@@ -1,7 +1,7 @@
 build/
 dist/
 *egg*
-tests/
+###tests/
 devel*
 skizzen/
 .ipynb_checkpoints/

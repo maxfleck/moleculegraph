@@ -1,6 +1,6 @@
 # moleculegraph
 
-simple undirected graph representation feor molecules and more...
+simple undirected graph representation for molecules and more...
 
 **Install**
 

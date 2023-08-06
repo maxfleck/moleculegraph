@@ -35,3 +35,8 @@ python setup.py install
 - ...so that the number after the operator always corresponds to the number of atoms in the encoded substructure :) 
 
 <img src="examples/latex/graph_mut-1.png" width="100%" height="100%">
+
+**future**
+
+- dummy operator to be able to code binding types, for example
+- allow different, user definable branch and ring operators

@@ -25,7 +25,7 @@ python setup.py install
 
 **syntax**
 
-<img src="examples/latex/graph_mdma-1.png" width="75%" height="75%">
+<img src="examples/latex/graph_mdma-1.png" width="100%" height="100%">
 
 - [b] encodes the branch operator, [r] encodes the ring operator
 - the number after the operator determines its range 
@@ -34,4 +34,4 @@ python setup.py install
 - subchains are skipped if completely enclosed by the operator       
 - ...so that the number after the operator always corresponds to the number of atoms in the encoded substructure :) 
 
-<img src="examples/latex/graph_mut-1.png" width="75%" height="75%">
+<img src="examples/latex/graph_mut-1.png" width="100%" height="100%">

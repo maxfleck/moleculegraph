@@ -38,4 +38,6 @@ jobs:
     - name: Test with amino_acids
       run: |
         python tests/amino_acids_tests.py
+        python tests/drug_tests.py
+        
         

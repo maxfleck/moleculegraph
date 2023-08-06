@@ -21,17 +21,13 @@ python setup.py install
 - not limited to small molecules i.e. branches and rings are possible
 
 
-![](latex/mdma.png?raw=true)
+<img src="examples/latex/graph_mdma-1.png" width="50%" height="50%">
 
+- [b] encodes the branch operator, [r] encodes the ring operator}
+- the number after the operator determines its range }
+- branches point forward, rings backwards }
+- operators refer to the subchain of the last atom before the operator }
+- subchains are skipped if completely enclosed by the operator}        
+- ...so that the number after the operator always corresponds to the number of atoms in the encoded substructure :) }
 
-**TO DO**
-
-- programming:
-
-    - <span style="color:red"> adjust naming i.e. bond or neighbour ;) </span>
-    - <span style="color:red">self.get_bond_matrix etc. is not necessary </span>
-    - <span style="color:red">kill self.funs that can crash the class -> ini-stuff is not a function that writes to self!!! </span>
-    
-- <span style="color:red">merge force field and distance matrix part </span>
-
-- <span style="color:red">make sub-packages i.e. all the defs </span>
+<img src="examples/latex/graph_mut-1.png" width="50%" height="50%">

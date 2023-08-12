@@ -14,7 +14,7 @@ print(np.array([molecule.atom_numbers.astype(float)]))
 print(molecule.distance_matrix)
 # print( molecule.bond_matrix )
 print(molecule.bond_list)
-molecule.visualize()
+molecule.visualize("gly.png")
 print(molecule.angle_keys)
 print(molecule.torsion_keys)
 

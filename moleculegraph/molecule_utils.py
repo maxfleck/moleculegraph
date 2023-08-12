@@ -349,16 +349,6 @@ def plot_graph(
     for b0, b1 in bond_list:
         graph.add_edge(b0, b1)
 
-    options = {
-        "node_size": 1200,
-        "node_color": "white",
-        "edgecolors": "black",
-        "linewidths": 5,
-        "width": 3,
-        "with_labels": True,
-        "alpha": 0.3,
-        "font_size": 12,
-    }
     labels = {}
     for i, name in enumerate(atom_names):
         labels[i] = name

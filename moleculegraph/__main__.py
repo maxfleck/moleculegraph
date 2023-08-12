@@ -45,7 +45,7 @@ class molecule:
         
         Furthermore:
         - this graph-representation is quite general and not limited to molecules.
-        - You might use it to represent your favorite baking recipes and optimize them.
+        - You might use it to represent your favorite baking recipes and optimize them.ZZ
 
         Parameters:
         - mol:
@@ -93,41 +93,17 @@ class molecule:
         self.atom_numbers = np.arange(self.atom_number)
         """array with numbers of all atoms"""
         
-        # get bond list
-        self.get_neighbour_list()
-        # housekeeping for get_neighbour_list
+        # housekeeping for get_neighbour_list (will be called later)
         # (the following things are generated when calling get_neighbour_list)
         self.idx_neighbour_list = np.array([])
         """array with indexes of all neighboured/bonded atoms"""
         self.neighbour_list = np.array([])
         """array with numbers of all neighboured/bonded atoms"""
-        self.ring_root_indexes
+        self.ring_root_indexes = np.array([])
         """array with indexes of all atoms rooting a ring"""
+       
         
-        # get branch ends
-        n, count = np.unique(self.bond_list, return_counts=True)
-        pp = np.squeeze(np.where(count == 1))
-        if np.sum(pp) > 0:
-            self.branch_end_numbers = n[pp]
-            self.branch_end_indexes = self.atom_indexes[self.branch_end_numbers]
-        else:
-            self.branch_end_numbers = np.empty(0)
-            self.branch_end_indexes = np.empty(0)
-        # get ring closures
-        self.ring_close_indexes = np.squeeze(np.where(self.f < 0)) - 1
-        """array with indexes of all atoms closing a ring"""
-        if np.sum(self.ring_close_indexes.shape) > 0:
-            self.ring_close_numbers = self.n[self.ring_close_indexes]
-            """array with atom numbers of all atoms closing a ring"""
-            self.ring_root_numbers = self.n[self.ring_root_indexes]
-            """array with atom numbers of all atoms rooting a ring"""
-        else:
-            self.ring_close_numbers = np.empty(0)
-            self.ring_root_numbers = np.empty(0)
-
-        # get distance matrix
-        self.get_distance_matrix()
-        # housekeeping for get_distance_matrix
+        # housekeeping for get_distance_matrix (will be called later)
         # (the following things are generated when calling get_distance_matrix)
         self.distance_matrix = np.array([])
         """distance matrix of all atoms in the molecule"""
@@ -156,6 +132,32 @@ class molecule:
         self.torsion_keys = np.array([])        
         """array of keys of all dihedral forming atoms (separated by 3 bonds)"""
 
+        # get bond list
+        self.get_neighbour_list()        
+        
+        # get branch ends
+        n, count = np.unique(self.bond_list, return_counts=True)
+        pp = np.squeeze(np.where(count == 1))
+        if np.sum(pp) > 0:
+            self.branch_end_numbers = n[pp]
+            self.branch_end_indexes = self.atom_indexes[self.branch_end_numbers]
+        else:
+            self.branch_end_numbers = np.empty(0)
+            self.branch_end_indexes = np.empty(0)
+        # get ring closures
+        self.ring_close_indexes = np.squeeze(np.where(self.f < 0)) - 1
+        """array with indexes of all atoms closing a ring"""
+        if np.sum(self.ring_close_indexes.shape) > 0:
+            self.ring_close_numbers = self.n[self.ring_close_indexes]
+            """array with atom numbers of all atoms closing a ring"""
+            self.ring_root_numbers = self.n[self.ring_root_indexes]
+            """array with atom numbers of all atoms rooting a ring"""
+        else:
+            self.ring_close_numbers = np.empty(0)
+            self.ring_root_numbers = np.empty(0)
+
+        # get distance matrix
+        self.get_distance_matrix()
         """ heres an inconsistency: 
             indexes refer to indexes in the graph.
             numbers refer to atom nubers etc. i.e. indexes excluding functionals like b=branch and r=ring

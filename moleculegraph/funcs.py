@@ -22,11 +22,12 @@ def sort_force_fields(x):
     sorts force field i.e. atom lists alphabetically.
     Very important for dictionary keys in the molecule class!!!
 
-    Args:
-        x:
-            -string list to sort.
+    Parameters:
+    - x:
+        - string list to sort.
+    
     Returns:
-        sorted list
+    - sorted list
     """
 
     # old... might cause errors
@@ -45,11 +46,12 @@ def sort_graph_key(x):
     sorts string i.e. the encapsulated atom lists alphabetically.
     Very important for dictionary keys in the molecule class!!!
 
-    Args:
-        x:
-            -string to sort.
+    Parameters:
+    - x:
+        -string to sort.
+    
     Returns:
-        sorted list
+    - sorted list
     """
 
     x = x[1:-1].split("][")
@@ -65,11 +67,12 @@ def read_json(path):
     """
     well...
 
-    Args:
-        path:
-            -path to json file.
+    Parameters:
+    - path:
+        -path to json file.
+    
     Returns:
-        dictionary, list of dictionaries (or whatever is in the file)
+    - dictionary, list of dictionaries (or whatever is in the file)
     """
     with open(path) as json_file:
         return json.load(json_file)
@@ -80,14 +83,12 @@ def pair_from_row(row):
     Gets pair potential from Joachims MC Code pair_potentials file.
     Charges are added later ;)
 
-    TO DO:
-    add atom name i.e. row[0]??? ...DONE!!!
-
-    Args:
-        row:
-            -splitted line i.e. list of line in pair_potentials file.
+    Parameters:
+    - row:
+        - splitted line i.e. list of line in pair_potentials file.
+    
     Returns:
-        pair potential dictionary
+    - pair potential dictionary
     """
     pair = {}
     pair["name"] = str(row[0])
@@ -105,13 +106,11 @@ def pair_of_h():
     Builds pair potential dummy for hydrogen atoms.
     Charges are added later ;)
 
-    TO DO:
-    add atom name i.e. row[0]??? ...DONE!!!
-
-    Args:
+    Parameters:
         none
+    
     Returns:
-        hydrogen pair potential dictionary
+    - hydrogen pair potential dictionary
     """
     pair = {}
     pair["name"] = "H"
@@ -129,19 +128,17 @@ def get_charge(row, pair_dict):
     Assigns charge to pair potential dict.
     Uses the normalized_levenshtein algorithm :)
 
-    TO DO:
-    add atom name i.e. row[0]??? ...DONE!!!
-
-    Args:
-        row:
-            - splitted charge line i.e. list of line in pair_potentials file.
-        pair_dict:
-            - dictionary containing pair potentials
+    Parameters:
+    - row:
+        - splitted charge line i.e. list of line in pair_potentials file.
+    - pair_dict:
+        - dictionary containing pair potentials
+    
     Returns:
-        key:
-            - dict key i.e. atom name the charge belongs to.
-        charge:
-            - float value of the charge
+    - key:
+        - dict key i.e. atom name the charge belongs to.
+    - charge:
+        - float value of the charge
     """
     keys = list(pair_dict.keys())
     dummy = np.zeros(len(keys))
@@ -156,15 +153,13 @@ def read_pair_potentials(path):
     """
     Reads pair potentials from Joachims MC Code pair_potentials file.
 
-    TO DO:
-    better dict structure???
-
-    Args:
-        path:
-            - path to pair_potentials file.
+    Parameters:
+    - path:
+        - path to pair_potentials file.
+            
     Returns:
-        pair_dict:
-            - dictionary containing pair potentials
+    - pair_dict:
+        - dictionary containing pair potentials
     """
     keylist = ["!", "#", "models:", "types", "References"]
     pair_dict = {}
@@ -198,15 +193,13 @@ def read_bond_potentials(path):
     """
     Reads bond potentials from Joachims MC Code bond_potentials file.
 
-    TO DO:
-    better dict structure???
-
-    Args:
-        path:
-            - path to bond_potentials file.
+    Parameters:
+    - path:
+        - path to bond_potentials file.
+        
     Returns:
-        bond_dict:
-            - dictionary containing bond potentials
+    - bond_dict:
+        - dictionary containing bond potentials
     """
     keylist = ["!", "#", "models:", "types"]
     bond_dict = {}
@@ -237,15 +230,13 @@ def read_angle_potentials(path):
     """
     Reads angle potentials from Joachims MC Code angle_potentials file.
 
-    TO DO:
-    better dict structure???
-
-    Args:
-        path:
-            - path to angle_potentials file.
+    Parameters:
+    - path:
+        - path to angle_potentials file.
+        
     Returns:
-        angle_dict:
-            - dictionary containing angle potentials
+    - angle_dict:
+        - dictionary containing angle potentials
     """
     keylist = ["!", "#", "models:", "types", "Note", "Note:"]
     angle_dict = {}
@@ -276,15 +267,13 @@ def read_torsion_potentials(path):
     """
     Reads torsion potentials from Joachims MC Code torsion_potentials file.
 
-    TO DO:
-    better dict structure???
-
-    Args:
-        path:
-            - path to torsion_potentials file.
+    Parameters:
+    - path:
+        - path to torsion_potentials file.
+        
     Returns:
-        torsion_dict:
-            - dictionary containing torsion potentials
+    - torsion_dict:
+        - dictionary containing torsion potentials
     """
     keylist = ["!", "#", "models:", "types", "Note:"]
     torsion_dict = {}
@@ -311,20 +300,20 @@ def read_torsion_potentials(path):
 
 def read_xyz(path, energy=False):
     """
-    Reads xyz file.
+    Reads xyz file. Supports tubomole xyz with energy in header
 
-    TO DO:
-    better dict structure???
-
-    Args:
-        path:
-            - path to xyz file.
-        energy:
-            - returns energy if true.
-            - use this with turbomol QM-results.
+    Parameters:
+    - path:
+        - path to xyz file.
+    - energy:
+        - returns energy if true.
+        - use this with turbomol QM-results.
+    
     Returns:
-        xyz:
-            - list of dicts, keys: "atom": atom name and "xyz": coordinates.
+    - xyz:
+        - list of dicts, keys: "atom": atom name and "xyz": coordinates.
+    - energy:
+        - (optional) if energy = True (bad style ?)
     """
     data = []
     with open(path) as csvfile:
@@ -350,16 +339,13 @@ def assign_CHx(xyz):
     Builds united atom groups fromm all atom xyz.
     Works with turbomol results and read_xyz def.
 
-    TO DO:
-    - better dict structure???
-    - check if turbomole output coos are sorted (should be)
-
-    Args:
-        xyz:
-            - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
+    Parameters:
+    - xyz:
+        - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
+        
     Returns:
-        xyz_CHx:
-            - list of united atom dicts, keys: "atom": atom name and "xyz": coordinates.
+    - xyz_CHx:
+        - list of united atom dicts, keys: "atom": atom name and "xyz": coordinates.
     """
     xyz_CHx = {}
     xkeys = sorted(xyz.keys())
@@ -383,7 +369,6 @@ def assign_CHx(xyz):
                 xyz_CHx[ii]["xyz"] = np.sum(
                     coos * np.array([15] + [1] * no), axis=1
                 ) / (15 + 1 * no)
-                # print(xyz_CHx[ii]["xyz"])
                 coos = []
                 flag = 0
                 ii += 1
@@ -400,19 +385,16 @@ def assign_CHx(xyz):
 
 def kill_CHx(xyz):
     """
-    Builds kills C-bonded hydrogens fromm all atom xyz.
+    Kills C-bonded hydrogens fromm all atom xyz.
     Works with turbomol results and read_xyz def.
 
-    TO DO:
-    - better dict structure???
-    - check if turbomole output coos are sorted (should be)
-
-    Args:
-        xyz:
-            - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
+    Parameters:
+    - xyz:
+        - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
+    
     Returns:
-        xyz_CHx:
-            - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
+    - xyz_CHx:
+        - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
     """
     xyz_CHx = {}
     xkeys = sorted(xyz.keys())
@@ -426,7 +408,6 @@ def kill_CHx(xyz):
             x += 1
         elif flag > 0:
             if xyz[x]["atom"] == "H":
-                # coos = np.column_stack((coos, xyz[x]["xyz"]))
                 x += 1
                 flag += 1
             else:
@@ -434,7 +415,6 @@ def kill_CHx(xyz):
                 xyz_CHx[ii] = {}
                 xyz_CHx[ii]["atom"] = "C"
                 xyz_CHx[ii]["xyz"] = coos
-                # print(xyz_CHx[ii]["xyz"])
                 coos = []
                 flag = 0
                 ii += 1
@@ -454,11 +434,12 @@ def to_xyz(xyz, path):
     Writes xyz file.
     Works with turbomol results and read_xyz def.
 
-    Args:
-        xyz:
-            - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
-        path:
-            - path to xyz file.
+    Parameters:
+    - xyz:
+        - list of atom dicts, keys: "atom": atom name and "xyz": coordinates.
+    - path:
+        - path to xyz file.
+        
     Returns:
         nothing
     """
@@ -476,11 +457,12 @@ def distance(x1, x2):
     """
     Returns spatial distance.
 
-    Args:
-        x1, x2:
-            - vectors.
+    Parameters:
+    - x1, x2:
+        - vectors.
+        
     Returns:
-        spatial distance between x1 and x2.
+    - spatial distance between x1 and x2.
     """
     return np.linalg.norm(x1 - x2)
 
@@ -489,11 +471,12 @@ def unit_vector(vector):
     """
     Returns the unit vector of the vector.
 
-    Args:
-        vector:
-            - vector.
+    Parameters:
+    - vector:
+        - vector.
+        
     Returns:
-        unit vector
+    - unit vector
     """
     return vector / np.linalg.norm(vector)
 
@@ -502,11 +485,12 @@ def angle_between(x1, x2, x3):
     """
     Returns the angle in radians between vectors x1, x2, x3.
 
-    Args:
-        x1, x2, x3:
-            - vectors.
+    Parameters:
+    - x1, x2, x3:
+        - vectors.
+            
     Returns:
-        rad angle
+    - rad angle
     """
     v1 = unit_vector(x1 - x2)
     v2 = unit_vector(x3 - x2)
@@ -521,11 +505,12 @@ def dihedral(x0, x1, x2, x3):
     Returns the dihedral angle in radians between vectors x0, x1, x2, x3.
     Praxeolitic formula -> 1 sqrt, 1 cross product
 
-    Args:
-        x0, x1, x2, x3:
-            - vectors.
+    Parameters:
+    - x0, x1, x2, x3:
+        - vectors.
+    
     Returns:
-        deg angle
+    - deg angle
     """
     b0 = -1.0 * (x1 - x0)
     b1 = x2 - x1

@@ -17,19 +17,22 @@ TO DO:
 def unique_sort(x, return_inverse=False):
     """
     Returns unique elements of a list array.
+    
     Important:
+    
     not the list is sorted but the indexes
     i.e. this function preserves the order
     of the original list.
 
-    Args:
-        X:
-            -list array.
-        return_inverse:
-            -boolean
+    Parameters:
+    - X:
+        - list array.
+    - return_inverse:
+        - boolean
+        
     Returns:
-        unique list array
-        ( and index and inverse if wanted )
+    - unique list array
+    ( and index and inverse if return_inverse = True )
     """
     _, index = np.unique(x, return_index=True)
     p = np.sort(index)
@@ -47,16 +50,17 @@ def get_bond_list(distance_matrix, distance=1):
     generates a list of atom pairs fullfilling a certain
     distance criterium.
 
-    Args:
-        distance_matrix:
-            -distance matrix.
-        distance:
-            -distance to look for
-                1: bond
-                2: angle
-                3: torsion/dihedral
+    Parameters:
+    - distance_matrix:
+        - distance matrix.
+    - distance:
+        - distance to look for
+            - 1: bond
+            - 2: angle
+            - 3: torsion/dihedral
+            
     Returns:
-        bond list
+    - bond list
     """
     blist = np.array(np.where(distance_matrix == distance)).T
     return np.unique(blist, axis=0)
@@ -66,15 +70,16 @@ def get_distances(y, xlist, size):
     """
     used in get_distance_list.
 
-    Args:
-        y:
-            -hmmm.
-        xlist:
-            -hmmm
-        size:
-            -hmmm
+    Parameters:
+    - y:
+        - hmmm.
+    - xlist:
+        - hmmm
+    - size:
+        - hmmm
+        
     Returns:
-        hmmm
+    - hmmm
     """
     md = []
     dummy = np.array([])
@@ -98,15 +103,16 @@ def get_distance_list(xlist, ylist, size):
     """
     used in get_distance_matrix.
 
-    Args:
-        xlist:
-            -hmmm.
-        ylist:
-            -hmmm
-        size:
-            -hmmm
+    Parameters:
+    - y:
+        - hmmm.
+    - xlist:
+        - hmmm
+    - size:
+        - hmmm
+        
     Returns:
-        hmmm
+    - hmmm
     """
     dlist = []
     for y in ylist:
@@ -126,22 +132,23 @@ def get_distance_matrix(neighbour_list, atom_number):
     """
     generates distance matrix from a list of neighboured atoms.
 
-    Args:
-        neighbour_list:
-            -list of neighboured atoms.
-        atom_number:
-            -number of atoms in the analyzed molecule.
+    Parameters:
+    - neighbour_list:
+        - list of neighboured atoms.
+    - atom_number:
+        - number of atoms in the analyzed molecule.
+    
     Returns:
-        distance_matrix:
-            - distance matrix of a molecule
-            - contains all distances
-        bond_lists:
-            - list of bond lists
-            - every bond list contains bonds of one distance
-                bond_lists[0]: neighbour list
-                bond_lists[1]: angle list
-                bond_lists[2]: torsion/dihedral list
-                ...
+    - distance_matrix:
+        - distance matrix of a molecule
+        - contains all distances
+    - bond_lists:
+        - list of bond lists
+        - every bond list contains bonds of one distance
+            - bond_lists[0]: neighbour list
+            - bond_lists[1]: angle list
+            - bond_lists[2]: torsion/dihedral list
+            - ...
     """
     distance_matrix = get_bond_matrix(neighbour_list, atom_number)
     # print(distance_matrix)
@@ -168,16 +175,16 @@ def get_bond_matrix(neighbour_list, atom_number):
     generates bond matrix from a list of neighboured atoms.
     redundant if distance matrix is available.
 
-    Args:
-        neighbour_list:
-            -list of neighboured atoms.
-        atom_number:
-            -number of atoms in the analyzed molecule.
+    Parameters:
+    - neighbour_list:
+        - list of neighboured atoms.
+    - atom_number:
+        - number of atoms in the analyzed molecule.
     Returns:
         bond_matrix:
             - bond matrix of a molecule
-                bond: 1
-                everything else: 0
+                - bond: 1
+                - everything else: 0
     """
     bond_matrix = np.zeros((atom_number, atom_number))
     for b in neighbour_list:
@@ -188,33 +195,32 @@ def get_bond_matrix(neighbour_list, atom_number):
     return bond_matrix
 
 
-def unite_atoms(
-    elements, atoms, masses, bond_list, UA=True
-):  # generalizable... not today ;)
+def unite_atoms( elements, atoms, masses, bond_list, UA=True ):
     """
     generates united atom coordinates from a list of atoms.
 
     TO DO:
-        -the atoms and masses objects are not obvious...
+    - the atoms and masses objects are not obvious...
 
-    Args:
-        elements:
-            - list of atoms elements.
-        atoms:
-            - list of atoms coordinates.
-        masses:
-            - masses of the atoms.
-        bond_matrix:
-            - bond matrix of the corresponding molecule
-            - ...distance matrix works too
+    Parameters:
+    - elements:
+        - list of atoms elements.
+    - atoms:
+        - list of atoms coordinates.
+    - masses:
+        - masses of the atoms.
+    - bond_matrix:
+        - bond matrix of the corresponding molecule
+        - ...distance matrix works too
+        
     Returns:
-        new_matrix:
-            - list of united atoms with coordinates.
-        new_masses:
-            - list of corresponding united atom masses.
-        new_bonds:
-            - list of corresponding united atom bonds.
-            - you can generate a new bond or distance matrix with this list.
+    - new_matrix:
+        - list of united atoms with coordinates.
+    - new_masses:
+        - list of corresponding united atom masses.
+    - new_bonds:
+        - list of corresponding united atom bonds.
+        - you can generate a new bond or distance matrix with this list.
     """
     keep = []
     keep_bonds = []
@@ -260,29 +266,31 @@ def unite_atoms(
 
 def assign_coos_via_distance_mat(coos_list, distance_matrix, reference):
     """
+    NOT MATURE !!! (but sometimes useful)
+    
     Assigns coos to suit a reference based on a distance matrix relying to the coos.
     Reference and distance matrix/ coos belong to the same molecule type but are sorted in
     different ways. Sorted rows (or cols) of a distance matrix belong to the same atom when
     they are equal.
 
     TO DO:
-        - add check based on levensthein to omit errors through branches!!!
-        - gernalizable for more than only coos???
-        - bad names :(
+    - add check based on levensthein to omit errors through branches!!!
+    - gernalizable for more than only coos???
+    - bad names :(
 
-    Args:
-        coos_list:
-            - list of coordinates (or anything else???!!!).
-        distance_matrix:
-            - distance matrix which belongs to the coos_list.
-        reference:
-            - distance matrix which belongs to the reference you want to apply the coos to.
+    Parameters:
+    - coos_list:
+        - list of coordinates (or anything else???!!!).
+    - distance_matrix:
+        - distance matrix which belongs to the coos_list.
+    - reference:
+        - distance matrix which belongs to the reference you want to apply the coos to.
 
     Returns:
-        new_coos_list:
-            - list of coordinates fitting the reference.
-        idx:
-            - indexes to translate sth. to reference.
+    - new_coos_list:
+        - list of coordinates fitting the reference.
+    - idx:
+        - indexes to translate sth. to reference.
     """
     distance_matrix_sort = np.sort(distance_matrix, axis=1)
     reference_sort = np.sort(reference, axis=1)
@@ -297,7 +305,8 @@ def assign_coos_via_distance_mat(coos_list, distance_matrix, reference):
     print(
         """\n\nWARNING:
     Assign_coos_via_distance_mat is not mature yet.
-    In branched molecules errors are conceivable because atom elements are not checked.
+    In branched molecules errors are conceivable because atom elements are not checked.\n
+    In structurally symmetric molecules with non-symmetric atome types errors might occur \n
     Double-check your results!!! \n \n"""
     )
 
@@ -322,18 +331,18 @@ def plot_graph(
     """
     plots graph...
 
-    Args:
-        atom_names:
-            - list or np.array of atom names
-        bond_list:
-            - list of bonds
-    Kwargs:
-        saveto:
-            - optional, location to save pic of graph to,
-            - add file format at the end ;)
-        options:
-            - dict
-            - networkx visualization options
+    Parameters:
+    - atom_names:
+        - list or np.array of atom names
+    - bond_list:
+        - list of bonds
+    - saveto:
+        - optional, location to save pic of graph to,
+        - add file format at the end ;)
+    - options:
+        - dict
+        - networkx visualization options
+            
     Returns:
         nothing
     """
@@ -375,13 +384,13 @@ def get_bond_list_from_smiles(smiles):
     """
     gets a bond list from a smiles code using rd kit
 
-    Args:
-        smiles:
-            - string, smiles code
+    Parameters:
+    - smiles:
+        - string, smiles code
 
     Returns:
-        bond_list:
-            - np.array of list of bonds
+    - bond_list:
+        - np.array of list of bonds
     """
     m = Chem.MolFromSmiles(smiles)
     bond_list = []
@@ -396,13 +405,13 @@ def graph_from_bonds(bond_list):
     """
     gets networkx graph object from a bond list
 
-    Args:
-        bond_list:
-            - np.array of list of bonds
+    Parameters:
+    - bond_list:
+        - np.array of list of bonds
 
     Returns:
-        graph:
-            - networkx graph object
+    - graph:
+        - networkx graph object
     """
     graph = nx.Graph()
     for b0, b1 in bond_list:
@@ -428,15 +437,15 @@ def visualize_graph(
     """
     visualizes graph...
 
-    Args:
-        graph:
-            - networkx graph object
-        names:
-            - list or np.array of atom names
-    Kwargs:
-        options:
-            - dict
-            - networkx visualization options
+    Parameters:
+    - graph:
+        - networkx graph object
+    - names:
+        - list or np.array of atom names
+    - options:
+        - dict
+        - networkx visualization options
+    
     Returns:
         nothing
     """
@@ -459,15 +468,16 @@ def longest_simple_paths(graph, source, target):
     i.e. paths without double paths
     between source and target
 
-    Args:
-        graph:
-            - networkx graph object
-        source:
-            - int, atom number to start from
-        target:
-            - int, atom number to end at
+    Parameters:
+    - graph:
+        - networkx graph object
+    - source:
+        - int, atom number to start from
+    - target:
+        - int, atom number to end at
+            
     Returns:
-        list of longest paths
+    - list of longest paths
 
     """
     longest_paths = []
@@ -487,13 +497,14 @@ def get_longest_path(graph, source=0):
     uses networkx to get longest simple path
     starting from source
 
-    Args:
-        graph:
-            - networkx graph object
-        source:
-            - int, atom number to start from
+    Parameters:
+    - graph:
+        - networkx graph object
+    - source:
+        - int, atom number to start from
+            
     Returns:
-        np.array, path (first that was found)
+     - np.array, path (first that was found)
 
     """
     longest_path = []
@@ -511,15 +522,16 @@ def get_shortest_paths(graph, source, target):
     uses networkx to get shortest paths
     between source and target
 
-    Args:
-        graph:
-            - networkx graph object
-        source:
-            - int, atom number to start from
-        target:
-            - int, atom number to end at
+    Parameters:
+    - graph:
+        - networkx graph object
+    - source:
+        - int, atom number to start from
+    - target:
+        - int, atom number to end at
+    
     Returns:
-        np.array, list of shortest paths
+    - np.array, list of shortest paths
 
     """
     shortest_paths = []
@@ -539,15 +551,16 @@ def get_shortest_path(graph, source, target):
     uses networkx to get shortest paths
     between source and target
 
-    Args:
-        graph:
-            - networkx graph object
-        source:
-            - int, atom number to start from
-        target:
-            - int, atom number to end at
+    Parameters:
+    - graph:
+        - networkx graph object
+    - source:
+        - int, atom number to start from
+    - target:
+        - int, atom number to end at
+            
     Returns:
-        np.array, shortest path (first that was found)
+    - np.array, shortest path (first that was found)
 
     """
     shortest_path = []
@@ -565,15 +578,16 @@ def get_shortest_nontrivial_path(graph, source, target):
     i.e. longer than one bond between source and target
     useful to detect ring structures
 
-    Args:
-        graph:
-            - networkx graph object
-        source:
-            - int, atom number to start from
-        target:
-            - int, atom number to end at
+    Parameters:
+    - graph:
+        - networkx graph object
+    - source:
+        - int, atom number to start from
+    - target:
+        - int, atom number to end at
+            
     Returns:
-        np.array, shortest nontrivial path (first that was found)
+    - np.array, shortest nontrivial path (first that is found)
 
     """
     shortest_path = []
@@ -589,15 +603,16 @@ def get_root(graph, source, range_back):
     """
     gets root of a substructure i.e. branch
 
-    Args:
-        graph:
-            - networkx graph object
-        source:
-            - int, atom number to start from
-        range_back:
-            - int, atom number to go back to find root
+    Parameters:
+    - graph:
+        - networkx graph object
+    - source:
+        - int, atom number to start from
+    - range_back:
+        - int, atom number to go back to find root
+            
     Returns:
-        int, atom number to of root
+    - int, atom number to of root
 
     """
     nodes = np.array(graph.nodes)
@@ -613,11 +628,12 @@ def bond_list_from_simple_path(path):
     builds a bond list from a simple path
     i.e. path without branches or rings
 
-    Args:
-        path:
-            - np.array, simple path
+    Parameters:
+    - path:
+        - np.array, simple path
+            
     Returns:
-        np.array, bond list
+    - np.array, bond list
 
     """
     return np.sort(np.array([path[:-1], path[1:]]).T)
@@ -627,14 +643,15 @@ def get_diff_in_bond_lists(bond_list_1, bond_list_2):
     """
     gets difference between two bond lists
 
-    Args:
-        bond_list_1:
-            - np.array, bond list
-        bond_list_2:
-            - np.array, bond list
+    Parameters:
+    - bond_list_1:
+        - np.array, bond list
+    - bond_list_2:
+        - np.array, bond list
+            
     Returns:
-        np.array, bond list containing diffs
-
+    - np.array, bond list containing diffs
+    
     """
     dd = np.concatenate([bond_list_1, bond_list_2])
     unique_bonds, count = np.unique(dd, axis=0, return_counts=True)
@@ -646,14 +663,14 @@ def get_next_index(main_path, remaining_bonds):
     """
     gets index of next substructure
 
-    Args:
-        main_path:
-            - networkx graph object
-        remaining_bonds:
-            - np.array, bond list
+    Parameters:
+    - main_path:
+        - networkx graph object
+    - remaining_bonds:
+        - np.array, bond list
+            
     Returns:
-        int, atom number of next index
-
+    - int, atom number of next index
     """
     connections = np.intersect1d(main_path, np.unique(remaining_bonds))
     ii = 1e10
@@ -669,16 +686,16 @@ def get_graphstring(bond_list, names, source=0):
     generates a graphstring from a bond list and atom names
     uses the longest path from source to an end as main path
 
-    Args:
-        bond_list:
-            - np.array, bond list
-        names:
-            - np.array, atom names
-    Kwargs:
-        source:
-            - int, start of main path, default=0
+    Parameters:
+    - bond_list:
+        - np.array, bond list
+    - names:
+        - np.array, atom names
+    - source:
+        - int, start of main path, default=0
+            
     Returns:
-        str, graphstring to use with moleculegraph
+    - str, graphstring to use with moleculegraph
     """
     graph = graph_from_bonds(bond_list)
     main_path = get_longest_path(graph, source=source)
@@ -690,17 +707,18 @@ def get_graphstring_set_main(graph, bond_list, names, main_path):
     generates a graphstring from a bond list and atom names
     uses the longest path from source to an end as main path
 
-    Args:
-        graph:
-            - networkx graph object
-        bond_list:
-            - np.array, bond list
-        names:
-            - np.array, atom names
-        main_path:
-            - np.array, main path to build graph from
+    Parameters:
+    - graph:
+        - networkx graph object
+    - bond_list:
+        - np.array, bond list
+    - names:
+        - np.array, atom names
+    - main_path:
+        - np.array, main path to build graph from
+            
     Returns:
-        str, graphstring to use with moleculegraph
+    - str, graphstring to use with moleculegraph
     """
     funs = np.zeros(main_path.shape)
     fun_ranges = np.zeros(main_path.shape)
@@ -777,12 +795,13 @@ def reenumerate_branches(branches):
     """
     reenumerates branches due to occurence
 
-    Args:
-        branches:
-            -list with branch numbers
+    Parameters:
+    - branches:
+        - list with branch numbers
+    
     Returns:
-        branches:
-            -rearranged list with branch numbers
+    - branches:
+        - rearranged list with branch numbers
     """
     dummy = branches.copy()
     _, uniq_idx = np.unique(dummy, return_index=True)
@@ -795,14 +814,14 @@ def get_branch_root(i, branches):
     """
     gets root of a branch
 
-    Args:
-        i: int
-            - number of branch to get root for
-        branches: np.array
-            -list with branch numbers
-    Returns:
-         int
-            -number of root branch
+    Parameters:
+    - i: int
+        - number of branch to get root for
+    - branches: np.array
+        - array with branch numbers
+            
+    Returns: 
+    - int number of root branch
     """
     if i == 0:
         return 0
@@ -821,10 +840,12 @@ def get_branch_root(i, branches):
 def make_graph(stringlist):
     """
     builds graph string from string list
-    Args:
-        stringlist:
-            - list of strings containing names and
-            - add file format at the end ;)
+    
+    Parameters:
+    - stringlist:
+        - list of strings containing names and
+        - add file format at the end ;)
+    
     Returns:
         nothing
     """

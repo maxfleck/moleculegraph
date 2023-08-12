@@ -9,7 +9,7 @@ setup(
     author_email="fleck@itt.uni-stuttgart.de",
     license="BSD 2-clause",
     packages=find_packages(),
-    install_requires=["ase", "numpy", "networkx", "rapidfuzz", "toml", "rdkit"],
+    install_requires=["pdoc3","ase", "numpy", "networkx", "rapidfuzz", "toml", "rdkit"],
     classifiers=[
         "Development Status :: 1 - Planning",
         "Intended Audience :: Science/Research",

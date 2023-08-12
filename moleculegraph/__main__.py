@@ -20,7 +20,12 @@ import json
 
 class molecule:
     """
-    write some random stuff here... lalalala
+    simple undirected graph representation for molecules and more.
+    
+    write code about molecules without the need to care about them.
+    
+    semantics only. Bring your own syntax.
+    
     """
 
     def __init__(self, mol):
@@ -29,27 +34,23 @@ class molecule:
         Future: allow different input types i.e. string, list...
 
         Main results of the initialization are:
-            - distance matrix of the molecule.
-            - atom, bond, angle, torsion lists.
-        ...you can use those to:
-            - map force-field information onto your molecule.
-            - generate inputs for templating trajectories and coordinates
-            - use group contribution approaches
-            - process coordinates from the PubChem-API
-        ...furthermore:
-            this graph-representation is quite general and not limited to molecules.
-            You might use it to represent your favorite baking recipes and optimize them.
-        ...GOALS:
-            this reprsentation is easily translatable to SMILEYS and SMILES-Codes.
-            SILEYS is powerful when it comes to chemical space exploration *zwinkersmiley*
+        - distance matrix of the molecule.
+        - atom, bond, angle, torsion lists.
+        
+        YOU can use them to:
+        - map force-field information onto your molecule.
+        - generate inputs for templating trajectories and coordinates
+        - use group contribution approaches
+        - process coordinates from the PubChem-API
+        
+        Furthermore:
+        - this graph-representation is quite general and not limited to molecules.
+        - You might use it to represent your favorite baking recipes and optimize them.
 
-        TO DO (??):
-        - function pointer i.e. r -> _r and b -> _b or something like this.
-        - OR: allow function dict ;)
-
-        Args:
-            mol:
-                -list representation of a molecule.
+        Parameters:
+        - mol:
+            - string representation of a molecule.
+        
         Returns:
             nothing
         """
@@ -57,10 +58,19 @@ class molecule:
             mol = mol[1:-1].split("][")
 
         self.molecule = np.array(mol)
+        """array representation of the molecule i.e. all keys/words/whatever in a list"""
         self.f = np.zeros(len(mol))  # shows function
+        """array with all functions. 
+        - branches pointing forward f > 0
+        - rings pointing backward f < 0
+        - beads without function f = 0
+        """
         self.n = -1 * np.ones(len(mol))  # shows atomnumber
+        """array with atom numbers. branches and rings n = -1 as they are no atoms"""        
         self.i = np.arange(len(mol))  # shows index
+        """array with indexes. atoms, branches and rings get an index"""         
         self.len = len(self.i)
+        """number of all elements i.e. atoms, branches and rings"""       
         n = 0
         for i, m in enumerate(mol):
             if m[0] == "b":
@@ -75,12 +85,25 @@ class molecule:
         # contains indexes of atoms
         # index of atom no n: self.atom_indexes[n]
         self.atom_indexes = self.i[self.f == 0]
+        """array with indexes of all atoms"""
         self.atom_names = self.molecule[self.f == 0]
+        """array with names of all atoms"""
         self.atom_number = len(self.atom_indexes)
+        """number of all atoms"""
         self.atom_numbers = np.arange(self.atom_number)
-
+        """array with numbers of all atoms"""
+        
         # get bond list
         self.get_neighbour_list()
+        # housekeeping for get_neighbour_list
+        # (the following things are generated when calling get_neighbour_list)
+        self.idx_neighbour_list = np.array([])
+        """array with indexes of all neighboured/bonded atoms"""
+        self.neighbour_list = np.array([])
+        """array with numbers of all neighboured/bonded atoms"""
+        self.ring_root_indexes
+        """array with indexes of all atoms rooting a ring"""
+        
         # get branch ends
         n, count = np.unique(self.bond_list, return_counts=True)
         pp = np.squeeze(np.where(count == 1))
@@ -92,17 +115,46 @@ class molecule:
             self.branch_end_indexes = np.empty(0)
         # get ring closures
         self.ring_close_indexes = np.squeeze(np.where(self.f < 0)) - 1
+        """array with indexes of all atoms closing a ring"""
         if np.sum(self.ring_close_indexes.shape) > 0:
             self.ring_close_numbers = self.n[self.ring_close_indexes]
+            """array with atom numbers of all atoms closing a ring"""
             self.ring_root_numbers = self.n[self.ring_root_indexes]
+            """array with atom numbers of all atoms rooting a ring"""
         else:
             self.ring_close_numbers = np.empty(0)
             self.ring_root_numbers = np.empty(0)
 
-        # if self.neighbour_list.size > 0:
+        # get distance matrix
         self.get_distance_matrix()
-        # else:
-        #    print("either small molecule or error")
+        # housekeeping for get_distance_matrix
+        # (the following things are generated when calling get_distance_matrix)
+        self.distance_matrix = np.array([])
+        """distance matrix of all atoms in the molecule"""
+        self.bond_lists = np.array([])
+        """nested array with bond lists 
+        - starting from atoms separeted by one bond bond_lists[0]
+        - then atoms separeted by two bonds bond_lists[1] 
+        - ...
+        """
+        self.idx_bond_list = np.array([])
+        """array with indexes of all neighboured/bonded atoms"""
+        self.bond_list = np.array([])  
+        """array with numbers of all neighboured/bonded atoms"""
+        self.bond_keys  = np.array([])
+        """array with keys of all neighboured/bonded atoms"""
+        self.angle_list = np.array([])
+        """array of numbers of all angle forming atoms (separated by 2 bonds)"""
+        self.angle_names = np.array([])
+        """array of names of all angle forming atoms (separated by 2 bonds)"""
+        self.angle_keys = np.array([])
+        """array of keys of all angle forming atoms (separated by 2 bonds)"""
+        self.torsion_list = np.array([])
+        """array of numbers of all dihedral forming atoms (separated by 3 bonds)"""
+        self.torsion_names = np.array([])
+        """array of names of all dihedral forming atoms (separated by 3 bonds)"""
+        self.torsion_keys = np.array([])        
+        """array of keys of all dihedral forming atoms (separated by 3 bonds)"""
 
         """ heres an inconsistency: 
             indexes refer to indexes in the graph.
@@ -117,45 +169,59 @@ class molecule:
             self.unique_atom_inverse,
         ) = dummy
         self.unique_atom_names = self.atom_names[self.unique_atom_indexes]
+        """array with unique atom names"""
         self.unique_atom_numbers = self.atom_numbers[self.unique_atom_indexes]
+        """array with numbers of unique atom names"""
         assert np.array_equal(
             self.unique_atom_keys[self.unique_atom_inverse], self.atom_names
         ), "unique atom in inverse doesnt work"
 
         dummy = unique_sort(self.bond_keys, return_inverse=True)
-        (
-            self.unique_bond_keys,
-            self.unique_bond_indexes,
-            self.unique_bond_inverse,
-        ) = dummy
+        self.unique_bond_keys = dummy[0]
+        """array with unique bond keys"""
+        self.unique_bond_indexes = dummy[1]
+        """array with unique bond indexes"""
+        self.unique_bond_inverse = dummy[2]
+        """array to invert unique bonds"""
+
         self.unique_bond_names = self.bond_names[self.unique_bond_indexes]
+        """array with unique bond names"""
         self.unique_bond_numbers = self.bond_list[self.unique_bond_indexes]
+        """array with numbers of unique bond names"""
         if len(self.bond_keys) > 0:
             assert np.array_equal(
                 self.unique_bond_keys[self.unique_bond_inverse], self.bond_keys
             ), "unique bond in inverse doesnt work"
 
         dummy = unique_sort(self.angle_keys, return_inverse=True)
-        (
-            self.unique_angle_keys,
-            self.unique_angle_indexes,
-            self.unique_angle_inverse,
-        ) = dummy
+        self.unique_angle_keys = dummy[0]
+        """array with unique angle keys"""
+        self.unique_angle_indexes = dummy[1]
+        """array with unique angle indexes"""
+        self.unique_angle_inverse = dummy[2]
+        """array to invert unique angles"""
+
         self.unique_angle_names = self.angle_names[self.unique_angle_indexes]
+        """array with unique angle names"""
         self.unique_angle_numbers = self.angle_list[self.unique_angle_indexes]
+        """array with numbers of unique angle names"""
         if len(self.angle_keys) > 0:
             assert np.array_equal(
                 self.unique_angle_keys[self.unique_angle_inverse], self.angle_keys
             ), "unique angle in inverse doesnt work"
 
         dummy = unique_sort(self.torsion_keys, return_inverse=True)
-        (
-            self.unique_torsion_keys,
-            self.unique_torsion_indexes,
-            self.unique_torsion_inverse,
-        ) = dummy
+        self.unique_torsion_keys = dummy[0]
+        """array with unique torsion keys"""
+        self.unique_torsion_indexes = dummy[1]
+        """array with unique torsion indexes"""
+        self.unique_torsion_inverse = dummy[2]
+        """array to invert unique torsions"""
+        
         self.unique_torsion_names = self.torsion_names[self.unique_torsion_indexes]
+        """array with unique torsion names"""
         self.unique_torsion_numbers = self.torsion_list[self.unique_torsion_indexes]
+        """array with numbers of unique torsion names"""
         if len(self.torsion_keys) > 0:
             assert np.array_equal(
                 self.unique_torsion_keys[self.unique_torsion_inverse], self.torsion_keys
@@ -171,22 +237,23 @@ class molecule:
                         make_graph(self.unique_atom_pair_names[-1])
                     )
         self.unique_atom_pair_names = np.array(self.unique_atom_pair_names)
+        """array with unique atom pair names. use them for combining rules."""
         self.unique_atom_pair_keys = np.array(self.unique_atom_pair_keys)
+        """array with unique atom pair keys. use them for combining rules."""
         return
 
     def get_neighbour_list(self):
         """
         generates a neighbour list from an initialized molecule
 
-        Args:
-            self:
-                -initialized molecule.
+        Parameters: None
+
         Returns:
-            neighbour_list:
-                -list of neighboured atoms containing their atom numbers.
-            idx_neighbour_list:
-                -list of neighboured atoms containing their atom indexes.
-        """
+        - neighbour_list:
+            - list of neighboured atoms containing their atom numbers.
+        - idx_neighbour_list:
+            - list of neighboured atoms containing their atom indexes.
+        """ 
 
         idx_neighbour_list = []
         idx_branch_ends = np.empty(0)
@@ -288,12 +355,11 @@ class molecule:
         """
         generates bond matrix from an initialized molecule
 
-        Args:
-            self:
-                -initialized molecule.
+        Parameters: None
+
         Returns:
-            bond_matrix:
-                - bond matrix of you molecule
+        - bond_matrix:
+            - bond matrix of you molecule
         """
         self.bond_matrix = get_bond_matrix(self.neighbour_list, self.atom_number)
         return self.bond_matrix.copy()
@@ -303,12 +369,11 @@ class molecule:
         generates distance matrix from an initialized molecule.
         Furthermore different angle and torsion lists are generated.
 
-        Args:
-            self:
-                -initialized molecule.
+        Parameters: None
+        
         Returns:
-            distance_matrix:
-                - distance matrix of you molecule
+        - distance_matrix:
+            - distance matrix of you molecule
         """
         self.distance_matrix, self.bond_lists = get_distance_matrix(
             self.neighbour_list, self.atom_number
@@ -343,34 +408,32 @@ class molecule:
     def get_atom_index(self, no):
         """
         returns index of atom.
-        Number: atom number
-        Index:  index in list representation of molecule.
+        - Number: atom number
+        - Index:  index in list representation of molecule.
         Number and index are differing due to functionals in the list.
 
-        Args:
-            self:
-                -initialized molecule.
-            no:
-                -number of the atom
+        Parameters:
+        - no:
+           - number of the atom
+           
         Returns:
-            index of atom nuber "no"
+        - index of atom number "no"
         """
         return int(self.atom_indexes[int(no)])  # int(np.squeeze(np.where(self.n==no)))
 
     def get_atom_no(self, idx):
         """
         returns index of atom.
-        Number: atom number
-        Index:  index in list representation of molecule.
+        - Number: atom number
+        - Index:  index in list representation of molecule.
         Number and index are differing due to functionals in the list.
 
-        Args:
-            self:
-                -initialized molecule.
-            idx:
-                -idx of the atom
+        Parameters:
+        - idx:
+            - idx of the atom
+            
         Returns:
-            number of atom with index
+        - number of atom with index
         """
         idx = int(idx)
         if self.f[idx] >= 0:
@@ -388,13 +451,12 @@ class molecule:
         Index:  index in list representation of molecule.
         Number and index are differing due to functionals in the list.
 
-        Args:
-            self:
-                -initialized molecule.
-            idx:
-                -index in list representation of molecule
+        Parameters:
+        idx:
+            - index in list representation of molecule
+            
         Returns:
-            index of the next atom after index idx
+        - index of the next atom after index idx
         """
         return int(np.min(self.atom_indexes[(self.atom_indexes - idx) > 0]))
 
@@ -404,13 +466,12 @@ class molecule:
         Index:  index in list representation of molecule.
         Number and index are differing due to functionals in the list.
 
-        Args:
-            self:
-                -initialized molecule.
-            idx:
-                -index in list representation of molecule
+        Parameters:
+        idx:
+            - index in list representation of molecule
+            
         Returns:
-            index of the atom before index idx
+        - index of the atom before index idx
         """
         return int(np.max(self.atom_indexes[(self.atom_indexes - idx) < 0]))
 
@@ -421,13 +482,12 @@ class molecule:
         Number: atom number
         Number and index are differing due to functionals in the list.
 
-        Args:
-            self:
-                -initialized molecule.
-            idx:
-                -index in list representation of molecule
+        Parameters:
+        - idx:
+            - index in list representation of molecule
+            
         Returns:
-            number of the atom after index idx
+        - number of the atom after index idx
         """
         return int(self.n[self.get_next_atom_idx(idx)])
 
@@ -438,11 +498,12 @@ class molecule:
         Number: atom number
         Number and index are differing due to functionals in the list.
 
-        Args:
+        Parameters:
             self:
-                -initialized molecule.
+                - initialized molecule.
             idx:
-                -index in list representation of molecule
+                - index in list representation of molecule
+                
         Returns:
             number of the atom before index idx
         """
@@ -453,16 +514,12 @@ class molecule:
         maps information from a dictionary onto the molecule.
         Use this for molecule information i.e. coordinates, group contributions,...
 
-        TO DO:
-        - checks for easy debugging
-
-        Args:
-            self:
-                -initialized molecule.
-            data:
-                -dictionary with: keys == atom names !!!
+        Parameters:
+        - data:
+            - dictionary with: keys == atom names !!!
+            
         Returns:
-            mapped data
+        - mapped data
         """
         return [*map(data.get, self.atom_names)]
 
@@ -472,16 +529,12 @@ class molecule:
         Preserves the order of the original list.
         Use this for force-field information i.e. potentials,...
 
-        TO DO:
-        - checks for easy debugging
-
-        Args:
-            self:
-                -initialized molecule.
-            data:
-                -dictionary with: keys == atom names !!!
+        Parameters:
+        - data:
+            - dictionary with: keys == atom names !!!
+            
         Returns:
-            mapped unique data
+        - mapped unique data
         """
         print(
             "map_unique_via_atom_names is outtdated... dont use\n shouldnt cause errors btw"
@@ -493,18 +546,15 @@ class molecule:
         maps information from a dictionary onto a goal.
         Use this for molecule information i.e. coordinates, group contributions,...
 
-        TO DO:
-        - checks for easy debugging
 
-        Args:
-            self:
-                -initialized molecule.
-            goal:
-                -list of keys
-            data:
-                -dictionary with keys in goal
+        Parameters:
+        - goal:
+            - list of keys
+        - data:
+            - dictionary with keys in goal
+            
         Returns:
-            mapped data
+        - mapped data
         """
         return [*map(data.get, goal)]
 
@@ -514,18 +564,14 @@ class molecule:
         Preserves the order of the original list.
         Use this for force-field information i.e. potentials,...
 
-        TO DO:
-        - checks for easy debugging
-
-        Args:
-            self:
-                -initialized molecule.
-            goal:
-                -list of keys
-            data:
-                -dictionary with keys in goal
+        Parameters:
+        - goal:
+            - list of keys
+        - data:
+            - dictionary with keys in goal
+            
         Returns:
-            mapped unique data
+        - mapped unique data
         """
         print("map_unique is outtdated... dont use\n shouldnt cause errors btw")
         return [*map(data.get, unique_sort(goal))]
@@ -539,18 +585,14 @@ class molecule:
         same as:
         [ self.map_unique( m, data) for m in goal ]
 
-        TO DO:
-        - checks for easy debugging
-
-        Args:
-            self:
-                -initialized molecule.
-            goal:
-                -with list list of keys
-            data:
-                -dictionary with keys in goal
+        Parameters:
+        - goal:
+            -with list list of keys
+        - data:
+            -dictionary with keys in goal
+            
         Returns:
-            mapped unique data
+        - mapped unique data
         """
         return [[*map(data.get, m)] for m in goal]
 
@@ -562,29 +604,26 @@ class molecule:
         2: angle
         3: torsion
 
-        TO DO:
-        - checks for easy debugging
-
-        Args:
-            self:
-                -initialized molecule.
-            x,y:
-                -atom numbers
+        Parameters:
+        - x,y:
+            - atom numbers
+            
         Returns:
-            distance
+        - distance
         """
         return self.distance_matrix[int(x)][int(y)]
 
     def get_sorted_key(self, x):
         """
-            Sorts a list alphabetically.
-            Very important for dictionary keys in the molecule class!!!
+        Sorts a list alphabetically.
+        Very important for dictionary keys in the molecule class!!!
 
-        Args:
-            x:
-                -string list to sort.
+        Parameters:
+        - x:
+            - string list to sort
+            
         Returns:
-            key (string) and sorted list
+        - key (string) and sorted list
         """
         x_sort = sort_force_fields(x)
         return make_graph(x_sort), x_sort
@@ -592,13 +631,12 @@ class molecule:
     def visualize(self, saveto=""):
         """
         plots and visualizes molecule
-        Args:
-            self:
-                -initialized molecule.
-        Kwargs:
-            saveto:
-                - optional, location to save pic of graph to,
-                - add file format at the end ;)
+        
+        Parameters:
+        - saveto:
+            - optional, location to save pic of graph to,
+            - add file format at the end ;)
+            
         Returns:
             nothing
         """

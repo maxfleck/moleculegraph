@@ -43,7 +43,7 @@ jobs:
         python tests/drug_tests.py
     - name: build doc
       run: |
-        pdoc moleculegraph/ -o docs/
+        pdoc moleculegraph/*py -o docs/
 
         
         

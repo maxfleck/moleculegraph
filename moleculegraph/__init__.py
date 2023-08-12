@@ -1,3 +1,3 @@
-from .main import *
+from .__main__ import *
 from .funcs import *
-from .utils import *
+from .molecule_utils import *

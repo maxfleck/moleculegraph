@@ -39,11 +39,5 @@ jobs:
       run: |
         python tests/amino_acids_tests.py
     - name: Test some drugs
-      run: |        
-        python tests/drug_tests.py
-    - name: build doc
       run: |
-        pdoc moleculegraph/*py -o docs/
-
-        
-        
+        python tests/drug_tests.py

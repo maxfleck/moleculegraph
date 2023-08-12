@@ -326,8 +326,7 @@ def plot_graph(
         "with_labels": True,
         "alpha": 0.3,
         "font_size": 12,
-    },
-):
+    } ):
     """
     plots graph...
 

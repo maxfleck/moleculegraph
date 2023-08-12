@@ -41,5 +41,12 @@ jobs:
     - name: Test some drugs
       run: |        
         python tests/drug_tests.py
+    - name: pdoc build -o .
+      run: |
+        pdoc moleculegraph
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-documentation
+        path: output/test/moleculegraph.html
         
         

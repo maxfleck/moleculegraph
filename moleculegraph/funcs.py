@@ -144,9 +144,15 @@ def get_charge(row, pair_dict):
     dummy = np.zeros(len(keys))
     for i, key in enumerate(keys):
         dummy[i] = normalized_distance(row[0][1:], key)
-    pointer = np.squeeze(np.where(dummy == np.amax(dummy)))
+    pointer = np.squeeze(np.where(dummy == np.amin(dummy)))
     charge = float(row[2])
-    return keys[pointer], charge
+    if pointer.shape:
+        print("ERROR: several atoms found for one charge:")
+        print("charge:", charge)
+        print("atoms:",keys[pointer])
+        return None, charge
+    else:
+        return keys[pointer], charge
 
 
 def read_pair_potentials(path):

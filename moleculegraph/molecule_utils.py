@@ -13,6 +13,61 @@ TO DO:
 - comments
 """
 
+def sort_force_fields(x):
+    """
+    sorts force field i.e. atom lists alphabetically.
+    Very important for dictionary keys in the molecule class!!!
+
+    Parameters:
+    - x:
+        - string list to sort.
+    
+    Returns:
+    - sorted list
+    """
+
+    # old... might cause errors
+    # p = np.argsort( [ x[0], x[-1] ] )
+
+    # new... should omit errors
+    p = np.argsort(["".join(x), "".join(np.flip(x))])
+    if p[0] <= p[1]:
+        return np.array(x)
+    else:
+        return np.flip(x)
+
+
+def sort_graph_key(x):
+    """
+    sorts string i.e. the encapsulated atom lists alphabetically.
+    Very important for dictionary keys in the molecule class!!!
+
+    Parameters:
+    - x:
+        -string to sort.
+    
+    Returns:
+    - sorted list
+    """
+
+    x = x[1:-1].split("][")
+    x = sort_force_fields(x)
+    return "[" + "][".join(x) + "]"
+
+def read_json(path):
+    """
+    well...
+
+    Parameters:
+    - path:
+        -path to json file.
+    
+    Returns:
+    - dictionary, list of dictionaries (or whatever is in the file)
+    """
+    with open(path) as json_file:
+        return json.load(json_file)
+
 
 def unique_sort(x, return_inverse=False):
     """
@@ -193,125 +248,6 @@ def get_bond_matrix(neighbour_list, atom_number):
         bond_matrix[i][j] = 1
         bond_matrix[j][i] = 1
     return bond_matrix
-
-
-def unite_atoms( elements, atoms, masses, bond_list, UA=True ):
-    """
-    generates united atom coordinates from a list of atoms.
-
-    TO DO:
-    - the atoms and masses objects are not obvious...
-
-    Parameters:
-    - elements:
-        - list of atoms elements.
-    - atoms:
-        - list of atoms coordinates.
-    - masses:
-        - masses of the atoms.
-    - bond_matrix:
-        - bond matrix of the corresponding molecule
-        - ...distance matrix works too
-        
-    Returns:
-    - new_matrix:
-        - list of united atoms with coordinates.
-    - new_masses:
-        - list of corresponding united atom masses.
-    - new_bonds:
-        - list of corresponding united atom bonds.
-        - you can generate a new bond or distance matrix with this list.
-    """
-    keep = []
-    keep_bonds = []
-    for i, p in enumerate(bond_list):
-        p0 = int(np.min(p))
-        p1 = int(np.max(p))
-        name0 = elements[p0][0]
-        name1 = elements[p1][0]
-        if (name0 == "H" and name1 == "C" and UA) or (
-            name1 == "H" and name0 == "C" and UA
-        ):
-            if name0 == "H" and name1 == "C":
-                p0 = int(np.max(p))
-                p1 = int(np.min(p))
-                name0 = elements[p0][0]
-                name1 = elements[p1][0]
-            coos_a = np.array(atoms[p0]).astype(float)
-            coos_b = np.array(atoms[p1]).astype(float)
-            mass_a = masses[p0]
-            mass_b = masses[p1]
-            dummy = (coos_a * mass_a + coos_b * mass_b) / (mass_a + mass_b)
-            atoms[p0][0] = dummy[0]
-            atoms[p0][1] = dummy[1]
-            atoms[p0][2] = dummy[2]
-            masses[p0] = mass_a + mass_b
-            masses[p1] = -1
-            keep.append(p0)
-        else:
-            keep.append(p0)
-            keep.append(p1)
-            keep_bonds.append(i)
-
-    keep = np.array(np.sort(np.unique(keep))).astype(int)
-
-    new_atoms = atoms[keep]
-    new_bonds = bond_list[keep_bonds]
-    new_elements = elements[keep]
-
-    p1 = np.where(masses != -1)
-    new_masses = masses[p1]
-    return new_elements, new_atoms, new_masses, new_bonds
-
-
-def assign_coos_via_distance_mat(coos_list, distance_matrix, reference):
-    """
-    NOT MATURE !!! (but sometimes useful)
-    
-    Assigns coos to suit a reference based on a distance matrix relying to the coos.
-    Reference and distance matrix/ coos belong to the same molecule type but are sorted in
-    different ways. Sorted rows (or cols) of a distance matrix belong to the same atom when
-    they are equal.
-
-    TO DO:
-    - add check based on levensthein to omit errors through branches!!!
-    - gernalizable for more than only coos???
-    - bad names :(
-
-    Parameters:
-    - coos_list:
-        - list of coordinates (or anything else???!!!).
-    - distance_matrix:
-        - distance matrix which belongs to the coos_list.
-    - reference:
-        - distance matrix which belongs to the reference you want to apply the coos to.
-
-    Returns:
-    - new_coos_list:
-        - list of coordinates fitting the reference.
-    - idx:
-        - indexes to translate sth. to reference.
-    """
-    distance_matrix_sort = np.sort(distance_matrix, axis=1)
-    reference_sort = np.sort(reference, axis=1)
-    idx = []
-    for ref in reference_sort:
-        for i, row in enumerate(distance_matrix_sort):
-            if np.array_equal(ref, row) and i not in idx:
-                idx.append(i)
-                break
-    idx = np.array(idx).astype(int)
-
-    print(
-        """\n\nWARNING:
-    Assign_coos_via_distance_mat is not mature yet.
-    In branched molecules errors are conceivable because atom elements are not checked.\n
-    In structurally symmetric molecules with non-symmetric atome types errors might occur \n
-    Double-check your results!!! \n \n"""
-    )
-
-    return coos_list[idx], idx
-
 
 def plot_graph(
     atom_names,

@@ -1,4 +1,4 @@
-from .funcs import *
+from .general_utils import *
 from .molecule_utils import *
 
 import numpy as np

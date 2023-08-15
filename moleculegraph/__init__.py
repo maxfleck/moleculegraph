@@ -37,7 +37,7 @@ class molecule:
 
     Furthermore:
     - this graph-representation is quite general and not limited to molecules.
-    - You might use it to represent your favorite baking recipes and optimize them.    
+    - ...you might use it to represent your favorite baking recipes and optimize them.    
     
     """
 

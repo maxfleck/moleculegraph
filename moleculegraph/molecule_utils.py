@@ -6,11 +6,13 @@ from rdkit import Chem
 
 """
 collection of functions needed by the molecule class.
-Mainly heading towards the distance matrix.
 
-TO DO:
-- not sure if everyting is used right now...
-- comments
+- sorting functionalities
+- generate bond lists and matrices
+- plotting
+- smiles interfacing
+- tools to generate equivalent graphstrings
+
 """
 
 def sort_force_fields(x):

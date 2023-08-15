@@ -18,7 +18,7 @@ python setup.py install
 
 - main goal: write code about molecules without the need to care abput molecules
 
-- easy semantics, agnositc against syntax
+- easy syntax, agnositc against semantics
 
 - string representation to describe molecules with focus on force-fields and easy mapping
 

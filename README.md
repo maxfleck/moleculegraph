@@ -1,7 +1,6 @@
 # moleculegraph
 
 [![DOI](https://zenodo.org/badge/673091646.svg)](https://zenodo.org/badge/latestdoi/673091646)
-[![Documentation Status](https://maxfleck.github.io/moleculegraph/moleculegraph.html)]([https://python-anesthesia-simulator.readthedocs.io/en/latest/?badge=latest](https://maxfleck.github.io/moleculegraph/moleculegraph.html))
 
 simple undirected graph representation for molecules and more...
 

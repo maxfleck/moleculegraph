@@ -1,5 +1,6 @@
 import numpy as np
 import csv
+import json
 import networkx as nx
 import matplotlib.pyplot as plt
 from rdkit import Chem

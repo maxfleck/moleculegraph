@@ -4,6 +4,8 @@
 
 simple undirected graph representation for molecules and more...
 
+Online documentation is available at [maxfleck.github.io/moleculegraph](https://maxfleck.github.io/moleculegraph/moleculegraph.html)
+
 **Install**
 
 pip install -I .

@@ -16,11 +16,11 @@ python setup.py install
 
 **moleculegraph**
 
-- package to describe Molecules with focus on force-fields and easy mapping
-
 - main goal: write code about molecules without the need to care abput molecules
 
 - easy semantics, agnositc against syntax
+
+- string representation to describe molecules with focus on force-fields and easy mapping
 
 - high flexibillity for naming your beads/atoms/whatever (b and r might have a negative impact. Maybe change)
     

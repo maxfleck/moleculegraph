@@ -25,26 +25,36 @@ class molecule:
     
     semantics only. Bring your own syntax.
     
+    Main results are:
+    - distance matrix of the molecule.
+    - atom, bond, angle, torsion lists.
+
+    YOU can use them to:
+    - map force-field information onto your molecule.
+    - generate inputs for templating trajectories and coordinates
+    - use group contribution approaches
+    - process coordinates from the PubChem-API
+
+    Furthermore:
+    - this graph-representation is quite general and not limited to molecules.
+    - You might use it to represent your favorite baking recipes and optimize them.    
+    
     """
 
     def __init__(self, mol):
         """
         initializes molecules based on graph-list representation.
-        Future: allow different input types i.e. string, list...
-
-        Main results of the initialization are:
-        - distance matrix of the molecule.
-        - atom, bond, angle, torsion lists.
         
-        YOU can use them to:
-        - map force-field information onto your molecule.
-        - generate inputs for templating trajectories and coordinates
-        - use group contribution approaches
-        - process coordinates from the PubChem-API
-        
-        Furthermore:
-        - this graph-representation is quite general and not limited to molecules.
-        - You might use it to represent your favorite baking recipes and optimize them.ZZ
+        The term index (or idx) always refers to a character in the string, 
+        be it semantic or syntactic. Semantics and syntax of the string are 
+        no longer important once the bond list and thus the actual graph is 
+        created. Then there are only syntactic objects, i.e. atoms.
+        Thus, all numbers occuring in bond, angle or torsional lists or in
+        distance matrices refer to atomic numbers. Indexes and semantic lists 
+        are only important for advanced applications. For example, generating
+        strings with the same meaning. If both options are available they are
+        are marked with index/indexes/idx and number/numbers. For example:
+        ring_root_numbers and ring_root_indexes.
 
         Parameters:
         - mol:
@@ -157,12 +167,7 @@ class molecule:
 
         # get distance matrix
         self.get_distance_matrix()
-        """ heres an inconsistency: 
-            indexes refer to indexes in the graph.
-            numbers refer to atom nubers etc. i.e. indexes excluding functionals like b=branch and r=ring
-            ... here numbers are called indexes.
-            ... is this ok? Is the whole concept intuitive?
-        """
+
         dummy = unique_sort(self.atom_names, return_inverse=True)
         (
             self.unique_atom_keys,
@@ -294,7 +299,7 @@ class molecule:
                     inv_branches[i] = branch_no
                     branch_no += 1
         branches = reenumerate_branches(inv_branches[::-1])
-        print(branches)
+        # print(branches)
 
         main_path_p = np.where(branches == 0)
         main_path_i = self.i[main_path_p]
@@ -308,9 +313,9 @@ class molecule:
         """
         f_p = np.atleast_1d(np.squeeze(np.where(self.f != 0)))
         self.ring_root_indexes = []
-        print("f_p , self.f[f_p]", f_p, self.f[f_p])
+        # print("f_p , self.f[f_p]", f_p, self.f[f_p])
         for i, fi in zip(f_p, self.f[f_p]):
-            print(branches)
+            #print(branches)
             if fi < 0:
                 idx = np.max(
                     get_diff_in_bond_lists(f_p[f_p < i], np.arange(i))
@@ -343,7 +348,7 @@ class molecule:
                     bond_list = np.concatenate([bond_list, subchain_bond_list])
             else:
                 print("fi = 0... this should not happen :P")
-        print("fin branches", branches)
+        #print("fin branches", branches)
         self.idx_neighbour_list = bond_list
         self.idx_bond_list = bond_list
         self.ring_root_indexes = np.array(self.ring_root_indexes)

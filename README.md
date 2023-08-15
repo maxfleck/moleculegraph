@@ -1,5 +1,7 @@
 # moleculegraph
 
+[![DOI](https://zenodo.org/badge/673091646.svg)](https://zenodo.org/badge/latestdoi/673091646)
+
 simple undirected graph representation for molecules and more...
 
 **Install**

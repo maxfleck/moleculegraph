@@ -6,7 +6,7 @@ simple undirected graph representation for molecules and more...
 
 Online documentation is available at [maxfleck.github.io/moleculegraph](https://maxfleck.github.io/moleculegraph/moleculegraph.html)
 
-**Install**
+## installation
 
 pip install -I .
 
@@ -14,7 +14,7 @@ or
 
 python setup.py install
 
-**moleculegraph**
+## moleculegraph
 
 - main goal: write code about molecules without the need to care abput molecules
 
@@ -27,7 +27,7 @@ python setup.py install
 - not limited to small molecules i.e. branches and rings are possible (works for amino acids and therefore proteins too)
 
 
-**syntax**
+## syntax
 
 <img src="examples/latex/graph_mdma-1.png" width="100%" height="100%">
 
@@ -40,7 +40,7 @@ python setup.py install
 
 <img src="examples/latex/graph_mut-1.png" width="100%" height="100%">
 
-**future**
+## future
 
 - dummy operator to be able to code binding types, for example
 - allow different, user definable branch and ring operators

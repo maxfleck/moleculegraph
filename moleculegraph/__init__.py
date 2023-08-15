@@ -23,7 +23,7 @@ class molecule:
     
     write code about molecules without the need to care about them.
     
-    semantics only. Bring your own syntax.
+    syntax only. Bring your own semantics.
     
     Main results are:
     - distance matrix of the molecule.
@@ -48,9 +48,9 @@ class molecule:
         The term index (or idx) always refers to a character in the string, 
         be it semantic or syntactic. Semantics and syntax of the string are 
         no longer important once the bond list and thus the actual graph is 
-        created. Then there are only syntactic objects, i.e. atoms.
+        created. Then there are only semantic objects, i.e. atoms.
         Thus, all numbers occuring in bond, angle or torsional lists or in
-        distance matrices refer to atomic numbers. Indexes and semantic lists 
+        distance matrices refer to atomic numbers. Indexes and syntactic lists 
         are only important for advanced applications. For example, generating
         strings with the same meaning. If both options are available they are
         are marked with index/indexes/idx and number/numbers. For example:

@@ -16,7 +16,7 @@ python setup.py install
 
 ## moleculegraph
 
-- main goal: write code about molecules without the need to care abput molecules
+- main goal: write code about molecules without the need to care about molecules
 
 - easy syntax, agnositc against semantics
 

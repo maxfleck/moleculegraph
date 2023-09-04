@@ -320,15 +320,13 @@ class molecule:
                 idx = np.max(
                     get_diff_in_bond_lists(f_p[f_p < i], np.arange(i))
                 )  # index of last atom
-                branches[i] = get_branch_root(
-                    branches[idx], branches
-                )  # connect ring to acompanying branch
                 subgraph = graph_from_bonds(bond_list)
                 path_to_main = get_shortest_path(subgraph, 0, idx)
 
                 bond_list_to_main = bond_list_from_simple_path(path_to_main)
                 graph_to_main = graph_from_bonds(bond_list_to_main)
                 root = get_root(graph_to_main, idx, int(np.abs(fi)))
+                branches[i] = branches[root] # connect ring to acompanying branch
                 if root < 0:
                     print("root of ring outside molecule. ignore.")
                 else:

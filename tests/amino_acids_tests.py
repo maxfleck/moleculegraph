@@ -262,3 +262,31 @@ tc.assertListEqual(
     sorted(list(CH3_expected)),
     "CH2 case xxx lists not equal",
 )
+
+
+"""
+protein test
+"""
+
+full_protein_string = "[C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][NH][C][b1][=O][C][b7][C][C1][C2][C3][C4][C5][C6][r6][NH][C][b1][=O][C][NH][C][b1][=O][C][b5][C][C][C][NH][b1][NH][H2N][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][b5][C][C][C][NH][b1][NH][H2N][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][NH]
+"
+
+
+full_protein = moleculegraph.molecule(full_protein_string)
+
+full_protein.visualize()
+
+expected = ['[C][C]', '[C][NH]', '[C][NH]', '[C][C]', '[C][NH]', '[C][NH]',
+       '[C][C]', '[C][NH]', '[C][NH]', '[C][C]', '[C][NH]', '[C][NH]',
+       '[C][C]', '[C][NH]', '[C][NH]', '[C][C]', '[C][NH]', '[C][NH]',
+       '[C][C]', '[C][NH]', '[C][NH]', '[C][C]', '[C][NH]', '[C][NH]',
+       '[C][C]', '[C][NH]', '[C][NH]', '[C][C]', '[C][NH]', '[=O][C]',
+       '[C][CH3]', '[=O][C]', '[=O][C]', '[C][C]', '[C1][C]', '[C1][C2]',
+       '[C2][C3]', '[C3][C4]', '[C4][C5]', '[C5][C6]', '[C1][C6]',
+       '[=O][C]', '[=O][C]', '[C][C]', '[C][C]', '[C][C]', '[C][NH]',
+       '[H2N][NH]', '[NH][NH]', '[=O][C]', '[C][CH3]', '[=O][C]',
+       '[C][CH3]', '[=O][C]', '[C][C]', '[C][C]', '[C][C]', '[C][NH]',
+       '[H2N][NH]', '[NH][NH]', '[=O][C]', '[C][CH3]', '[=O][C]']
+
+tc = unittest.TestCase()
+tc.assertListEqual( sorted(list(full_protein.bond_keys)), sorted(list(expected)), "lists not equal" ) 

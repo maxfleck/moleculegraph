@@ -268,8 +268,7 @@ tc.assertListEqual(
 protein test
 """
 
-full_protein_string = "[C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][NH][C][b1][=O][C][b7][C][C1][C2][C3][C4][C5][C6][r6][NH][C][b1][=O][C][NH][C][b1][=O][C][b5][C][C][C][NH][b1][NH][H2N][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][b5][C][C][C][NH][b1][NH][H2N][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][NH]
-"
+full_protein_string = "[C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][NH][C][b1][=O][C][b7][C][C1][C2][C3][C4][C5][C6][r6][NH][C][b1][=O][C][NH][C][b1][=O][C][b5][C][C][C][NH][b1][NH][H2N][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][b5][C][C][C][NH][b1][NH][H2N][NH][C][b1][=O][C][b1][CH3][NH][C][b1][=O][C][NH]"
 
 
 full_protein = moleculegraph.molecule(full_protein_string)

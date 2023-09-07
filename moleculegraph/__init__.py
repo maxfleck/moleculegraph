@@ -41,7 +41,11 @@ class molecule:
     
     """
 
-    def __init__(self, mol):
+    def __init__(self, mol, 
+                 branch_operators=["b"], ring_operators=["r"],
+                 branch_point_to_last=False, ring_point_to_first=False,
+                 min_ring_size=2, max_branch_size=np.inf
+                ):
         """
         initializes molecules based on graph-list representation.
         
@@ -63,9 +67,19 @@ class molecule:
         Returns:
             nothing
         """
+        
+        self.branch_point_to_last= branch_point_to_last
+        self.ring_point_to_first = ring_point_to_first
+        self.branch_operators = branch_operators
+        self.ring_operators = ring_operators
+        self.min_ring_size = min_ring_size
+        
+        self.molstring = mol
         if isinstance(mol, str):
             mol = mol[1:-1].split("][")
-
+        else: # add more opts???
+            mol = mol[1:-1].split("][")
+            
         self.molecule = np.array(mol)
         """array representation of the molecule i.e. all keys/words/whatever in a list"""
         self.f = np.zeros(len(mol))  # shows function
@@ -81,15 +95,29 @@ class molecule:
         self.len = len(self.i)
         """number of all elements i.e. atoms, branches and rings"""       
         n = 0
+        idx_delete = []
         for i, m in enumerate(mol):
-            if m[0] == "b":
-                self.f[i] = int(m[1:])
-            elif m[0] == "r":
-                # dum = -int(m[1:])
-                self.f[i] = -int(m[1:])  # self.get_atom_index()
+            if re.sub(r"\d+","", m) in branch_operators:
+                branch_size = int(re.sub("[^0-9]","", m ))
+                if branch_size <= max_branch_size:
+                    self.f[i] = branch_size
+                else:
+                    idx_delete.append(i)
+                    print( "branch_size exceeds max_branch_size",m )
+            elif re.sub(r"\d+","", m) in ring_operators:
+                ring_size = int(re.sub("[^0-9]","",m ))
+                if ring_size > min_ring_size:
+                    self.f[i] = -ring_size
+                else:
+                    idx_delete.append(i)
+                    print( "ring_size below min_ring_size",m )
             else:
                 self.n[i] = n
                 n += 1
+        if idx_delete:
+            idx_delete = np.array(idx_delete)
+            stringlist = np.delete(mol, idx_delete)
+            self.reinit_mol( make_graph(stringlist) )
 
         # contains indexes of atoms
         # index of atom no n: self.atom_indexes[n]
@@ -248,6 +276,43 @@ class molecule:
         """array with unique atom pair keys. use them for combining rules."""
         return
 
+    def reinit_mol(self,mol):
+        """
+        reinitializes moleculeclass
+        
+        """
+        
+        self.molstring = mol
+        if isinstance(mol, str):
+            mol = mol[1:-1].split("][")
+        
+        self.molecule = np.array(mol)
+        """array representation of the molecule i.e. all keys/words/whatever in a list"""
+        self.f = np.zeros(len(mol))  # shows function
+        """array with all functions. 
+        - branches pointing forward f > 0
+        - rings pointing backward f < 0
+        - beads without function f = 0
+        """
+        self.n = -1 * np.ones(len(mol))  # shows atomnumber
+        """array with atom numbers. branches and rings n = -1 as they are no atoms"""        
+        self.i = np.arange(len(mol))  # shows index
+        """array with indexes. atoms, branches and rings get an index"""         
+        self.len = len(self.i)
+        """number of all elements i.e. atoms, branches and rings"""       
+        n = 0
+        for i, m in enumerate(mol):
+            if m[0] == "b":
+                self.f[i] = int(m[1:])
+            elif m[0] == "r":
+                # dum = -int(m[1:])
+                self.f[i] = -int(m[1:])  # self.get_atom_index()
+            else:
+                self.n[i] = n
+                n += 1    
+        return    
+    
+    
     def get_neighbour_list(self):
         """
         generates a neighbour list from an initialized molecule
@@ -327,18 +392,34 @@ class molecule:
                 graph_to_main = graph_from_bonds(bond_list_to_main)
                 root = get_root(graph_to_main, idx, int(np.abs(fi)))
                 branches[i] = branches[root] # connect ring to acompanying branch
-                if root < 0:
+                if root < 0 and self.ring_point_to_first:
+                    if fi+root >= self.min_ring_size:
+                        root = np.min(self.atom_indexes)
+                        bond_list = np.concatenate([bond_list, [[root, idx]]])
+                        self.ring_root_indexes.append(root)                    
+                        print("root of ring outside molecule. point to first atom.")
+                    else:
+                        print( "ring size smaller:",self.min_ring_size,". ignore")
+                elif root < 0:
                     print("root of ring outside molecule. ignore.")
                 else:
                     bond_list = np.concatenate([bond_list, [[root, idx]]])
                     self.ring_root_indexes.append(root)
             elif fi > 0:
                 link = get_branch_root(branches[i], branches)
+                if not self.is_atom(link):
+                    link = self.get_last_atom_idx(link)
                 branch = branches[i]
                 p_subchain_i = np.atleast_1d(np.squeeze(np.where(branches == branch)))[
                     1:
                 ]
-                if len(p_subchain_i) < fi:
+                if len(p_subchain_i) < fi and self.branch_point_to_last:
+                    link = np.max(self.atom_indexes)
+                    p_subchain_i = np.concatenate([[link], p_subchain_i])
+                    subchain_bond_list = bond_list_from_simple_path(p_subchain_i)
+                    bond_list = np.concatenate([bond_list, subchain_bond_list])                    
+                    print("end of branch outside molecule. point to last atom.")
+                elif len(p_subchain_i) < fi:
                     print("end of branch outside molecule. ignore.")
                 else:
                     p_subchain_i = np.concatenate([[link], p_subchain_i])
@@ -350,7 +431,7 @@ class molecule:
         self.idx_neighbour_list = bond_list
         self.idx_bond_list = bond_list
         self.ring_root_indexes = np.array(self.ring_root_indexes)
-
+        
         self.neighbour_list = np.vectorize(self.get_atom_no)(self.idx_neighbour_list)
         self.bond_list = self.neighbour_list
         return self.neighbour_list, self.idx_neighbour_list
@@ -408,6 +489,25 @@ class molecule:
             self.torsion_names = np.array([])
             self.torsion_keys = np.array([])
         return self.distance_matrix.copy()
+    
+    def is_atom(self,idx):
+        """
+        checks if index is an atom.
+        - Number: atom number
+        - Index:  index in list representation of molecule.
+        Number and index are differing due to functionals in the list.
+
+        Parameters:
+        - idx:
+            - idx of the atom
+            
+        Returns:
+        - boolean
+        """
+        if idx in self.atom_indexes:
+            return True
+        else:
+            return False
 
     def get_atom_index(self, no):
         """
@@ -423,7 +523,7 @@ class molecule:
         Returns:
         - index of atom number "no"
         """
-        return int(self.atom_indexes[int(no)])  # int(np.squeeze(np.where(self.n==no)))
+        return int(self.atom_indexes[int(no)])
 
     def get_atom_no(self, idx):
         """
@@ -442,11 +542,11 @@ class molecule:
         idx = int(idx)
         if self.f[idx] >= 0:
             no = int(np.squeeze(np.where(self.atom_indexes == idx)))
-            assert no == self.n[idx], "atom numbers dont work"
+            assert no == self.n[idx], "atom numbers dont work,idx"
             return no
         else:
-            assert self.n[idx] == -1, "atom numbers dont work"
-            print("Error in get_atom_no: not an atom")
+            assert self.n[idx] == -1, "atom numbers dont work, n=-1"
+            print("Error in get_atom_no: not an atom",idx)
             return False
 
     def get_next_atom_idx(self, idx):

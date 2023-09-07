@@ -3,7 +3,7 @@ from .molecule_utils import *
 
 import numpy as np
 import csv
-
+import re
 # from rapidfuzz.string_metric import normalized_levenshtein
 import json
 

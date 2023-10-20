@@ -125,6 +125,8 @@ class molecule:
         """array with indexes of all atoms"""
         self.atom_names = self.molecule[self.f == 0]
         """array with names of all atoms"""
+        self.atom_keys = np.array( [ "["+x+"]" for x in self.atom_names ] )
+        """array with keys of all atoms"""        
         self.atom_number = len(self.atom_indexes)
         """number of all atoms"""
         self.atom_numbers = np.arange(self.atom_number)

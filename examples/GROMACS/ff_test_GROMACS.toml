@@ -1,0 +1,379 @@
+[atoms.C_end]
+atomic_number = 6
+mass = 12.01
+charge = 0.1134
+ptype = "A"
+sigma = 0.339967
+epsilon = 0.45773
+name = "C_end"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.C_mid]
+atomic_number = 6
+mass = 12.01
+charge = 0.1398
+ptype = "A"
+sigma = 0.339967
+epsilon = 0.45773
+name = "C_mid"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.H]
+atomic_number = 1
+mass = 1.008
+charge = 0.0321
+ptype = "A"
+sigma = 0.247135
+epsilon = 0.0656888
+name = "H"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.H_C_mid]
+atomic_number = 1
+mass = 1.008
+charge = 0.0632
+ptype = "A"
+sigma = 0.247135
+epsilon = 0.0656888
+name = "H_C_mid"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.H_O_mid]
+atomic_number = 1
+mass = 1.008
+charge = 0.4151
+ptype = "A"
+sigma = 0.01996
+epsilon = 0.00418
+name = "H_O_mid"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.H_O_end]
+atomic_number = 1
+mass = 1.008
+charge = 0.4048
+ptype = "A"
+sigma = 0.01996
+epsilon = 0.00418
+name = "H_O_end"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.O_end]
+atomic_number = 8
+mass = 16.0
+charge = -0.596251
+ptype = "A"
+sigma = 0.306647
+epsilon = 0.880314
+name = "O_end"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[atoms.O_mid]
+atomic_number = 8
+mass = 16.0
+charge = -0.590451
+ptype = "A"
+sigma = 0.306647
+epsilon = 0.880314
+name = "O_mid"
+cut = 14.0
+m = 12.0
+style = "lennard-jones"
+
+[bonds."[C_end][C_mid]"]
+funct = 1
+r = 0.1535
+k = 253634.08
+name = "[C_end][C_mid]"
+style = "harmonic"
+
+[bonds."[C_end][O_end]"]
+funct = 1
+r = 0.1426
+k = 262838.88
+name = "[C_end][O_end]"
+style = "harmonic"
+
+[bonds."[C_end][H]"]
+funct = 1
+r = 0.1093
+k = 281081.12
+name = "[C_end][H]"
+style = "harmonic"
+
+[bonds."[C_mid][O_mid]"]
+funct = 1
+r = 0.1426
+k = 262838.88
+name = "[C_mid][O_mid]"
+style = "harmonic"
+
+[bonds."[C_mid][H_C_mid]"]
+funct = 1
+r = 0.1093
+k = 281081.12
+name = "[C_mid][H_C_mid]"
+style = "harmonic"
+
+[bonds."[H_O_end][O_end]"]
+funct = 1
+r = 0.0974
+k = 309281.28
+name = "[H_O_end][O_end]"
+style = "harmonic"
+
+[bonds."[H_O_mid][O_mid]"]
+funct = 1
+r = 0.0974
+k = 309281.28
+name = "[H_O_mid][O_mid]"
+style = "harmonic"
+
+[angles."[C_end][C_mid][C_end]"]
+funct = 1
+theta = 110.63005
+cth = 528.94128
+name = "[C_end][C_mid][C_end]"
+style = "harmonic"
+
+[angles."[C_end][C_mid][O_mid]"]
+funct = 1
+theta = 109.43005
+cth = 566.68096
+name = "[C_end][C_mid][O_mid]"
+style = "harmonic"
+
+[angles."[C_end][C_mid][H_C_mid]"]
+funct = 1
+theta = 110.07005
+cth = 387.94048
+name = "[C_end][C_mid][H_C_mid]"
+style = "harmonic"
+
+[angles."[C_end][O_end][H_O_end]"]
+funct = 1
+theta = 108.16005
+cth = 394.04912
+name = "[C_end][O_end][H_O_end]"
+style = "harmonic"
+
+[angles."[C_mid][C_end][O_end]"]
+funct = 1
+theta = 109.43005
+cth = 566.68096
+name = "[C_mid][C_end][O_end]"
+style = "harmonic"
+
+[angles."[C_mid][C_end][H]"]
+funct = 1
+theta = 110.07005
+cth = 387.94048
+name = "[C_mid][C_end][H]"
+style = "harmonic"
+
+[angles."[C_mid][O_mid][H_O_mid]"]
+funct = 1
+theta = 108.16005
+cth = 394.04912
+name = "[C_mid][O_mid][H_O_mid]"
+style = "harmonic"
+
+[angles."[H][C_end][O_end]"]
+funct = 1
+theta = 109.88005
+cth = 426.51696
+name = "[H][C_end][O_end]"
+style = "harmonic"
+
+[angles."[H_C_mid][C_mid][O_mid]"]
+funct = 1
+theta = 109.88005
+cth = 426.51696
+name = "[H_C_mid][C_mid][O_mid]"
+style = "harmonic"
+
+[angles."[H][C_end][H]"]
+funct = 1
+theta = 109.55005
+cth = 327.85824
+name = "[H][C_end][H]"
+style = "harmonic"
+
+[dihedrals."[C_end][C_mid][C_end][H]"]
+func = 3
+a = 0.65084
+b = 1.95252
+c = 0.0
+d = -2.60336
+e = 0.0
+f = -0.0
+name = "[C_end][C_mid][C_end][H]"
+style = "opls"
+
+[dihedrals."[C_end][C_mid][C_end][O_end]"]
+func = 3
+a = 0.65084
+b = 1.95252
+c = 0.0
+d = -2.60336
+e = 0.0
+f = -0.0
+name = "[C_end][C_mid][C_end][O_end]"
+style = "opls"
+
+[dihedrals."[C_end][C_mid][O_mid][H_O_mid]"]
+func = 3
+a = 0.66944
+b = 2.00832
+c = 0.0
+d = -2.67776
+e = 0.0
+f = -0.0
+name = "[C_end][C_mid][O_mid][H_O_mid]"
+style = "opls"
+
+[dihedrals."[C_mid][C_end][O_end][H_O_end]"]
+func = 3
+a = 0.66944
+b = 2.00832
+c = 0.0
+d = -2.67776
+e = 0.0
+f = -0.0
+name = "[C_mid][C_end][O_end][H_O_end]"
+style = "opls"
+
+[dihedrals."[H][C_end][C_mid][H_C_mid]"]
+func = 3
+a = 0.65084
+b = 1.95252
+c = 0.0
+d = -2.60336
+e = 0.0
+f = -0.0
+name = "[H][C_end][C_mid][H_C_mid]"
+style = "opls"
+
+[dihedrals."[H][C_end][C_mid][O_mid]"]
+func = 3
+a = 1.046
+b = -1.046
+c = 0.0
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[H][C_end][C_mid][O_mid]"
+style = "opls"
+
+[dihedrals."[H][C_end][O_end][H_O_end]"]
+func = 3
+a = 0.69733
+b = 2.09199
+c = 0.0
+d = -2.78932
+e = 0.0
+f = -0.0
+name = "[H][C_end][O_end][H_O_end]"
+style = "opls"
+
+[dihedrals."[H_C_mid][C_mid][C_end][O_end]"]
+func = 3
+a = 1.046
+b = -1.046
+c = 0.0
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[H_C_mid][C_mid][C_end][O_end]"
+style = "opls"
+
+[dihedrals."[H_C_mid][C_mid][O_mid][H_O_mid]"]
+func = 3
+a = 0.69733
+b = 2.09199
+c = 0.0
+d = -2.78932
+e = 0.0
+f = -0.0
+name = "[H_C_mid][C_mid][O_mid][H_O_mid]"
+style = "opls"
+
+[dihedrals."[O_end][C_end][C_mid][O_mid]"]
+func = 3
+a = 0.6025
+b = 1.8075
+c = 0.0
+d = -2.41
+e = 0.0
+f = -0.0
+name = "[O_end][C_end][C_mid][O_mid]"
+style = "opls"
+
+[improper_dihedrals."[C_end][C_mid][O_mid][H_O_mid]"]
+func = 3
+a = 1.046
+b = -1.046
+c = 0.0
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[C_end][C_mid][O_mid][H_O_mid]"
+style = "opls"
+
+[improper_dihedrals."[C_mid][C_end][O_end][H_O_end]"]
+func = 3
+a = 1.046
+b = -1.046
+c = 0.0
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[C_mid][C_end][O_end][H_O_end]"
+style = "opls"
+
+[improper_dihedrals."[H][C_end][C_mid][O_mid]"]
+func = 3
+a = 0.0
+b = -0.0
+c = 0.0
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[H][C_end][C_mid][O_mid]"
+style = "opls"
+
+[improper_dihedrals."[H_C_mid][C_mid][C_end][O_end]"]
+func = 3
+a = 0.0
+b = -0.0
+c = 0.0
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[H_C_mid][C_mid][C_end][O_end]"
+style = "opls"
+
+[improper_dihedrals."[O_end][C_end][C_mid][O_mid]"]
+func = 3
+a = 0.0
+b = -0.0
+c = 9.8324
+d = -0.0
+e = 0.0
+f = -0.0
+name = "[O_end][C_end][C_mid][O_mid]"
+style = "opls"

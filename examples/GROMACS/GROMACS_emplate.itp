@@ -1,0 +1,45 @@
+[ atomtypes ]
+; type, atomic_number, mass, charge, ptype, sigma, epsilon
+{%- for n,a in rd.atomtypes %}
+{{ "{:<10}".format(a.name) }}     6        {{ "{:<10}".format(a.mass)}}         {{ "{:<10}".format(a.charge) }} A        {{ "{:<10}".format(a.sigma) }}     {{ "{:<10}".format(a.epsilon) }}
+{%- endfor %}
+
+
+[ atoms ]
+; num, type, resnum, resname, atomname, cgnr, q, m
+{%- for n,atomname,a in rd.atoms %}
+{{ "{:>6}".format(n) }} {{ "{:<10}".format(a.name) }}                 1 MOL {{ "{:>7}".format(atomname) }}      {{ "{:>7}".format(n) }}       {{ "{:>10}".format(a.charge) }}       {{ "{:>10}".format(a.mass) }}  
+{%- endfor %}
+                                                                  
+[ pairs ]
+;  ai    aj   funct
+{%- for ai,aj in rd.pairs %}
+{{ "{:>6}".format(ai) }}  {{ "{:>6}".format(aj) }}    1
+{%- endfor %}
+
+[ bonds ]
+;   ai     aj funct  r               k
+{%- for n,a in rd.bonds %}
+{{ "{:>7}".format(n.0) }} {{ "{:>7}".format(n.1) }} 1       {{ "{:>10}".format(a.r) }}    {{ "{:>10}".format(a.k) }}
+{%- endfor %}
+
+[ angles ]
+;   ai     aj     ak     funct  theta    cth
+{%- for n,a in rd.angles %}
+{{ "{:>7}".format(n.0) }} {{ "{:>7}".format(n.1) }} {{ "{:>7}".format(n.2) }} 1       {{ "{:>10}".format(a.theta) }}    {{ "{:>10}".format(a.cth) }}
+{%- endfor %}
+
+[ dihedrals ]
+;    i      j      k      l   func a b c d e f
+{%- for n,a in rd.dihedrals %}
+{{ "{:>7}".format(n.0) }} {{ "{:>7}".format(n.1) }} {{ "{:>7}".format(n.2) }} {{ "{:>7}".format(n.3) }} 3       {{ "{:>10}".format(a.a) }}    {{ "{:>10}".format(a.b) }}    {{ "{:>10}".format(a.c) }}    {{ "{:>10}".format(a.d) }}    {{ "{:>10}".format(a.e) }}    {{ "{:>10}".format(a.f) }}
+{%- endfor %}
+{%- for n,a in rd.improper_dihedrals %}
+{{ "{:>7}".format(n.0) }} {{ "{:>7}".format(n.1) }} {{ "{:>7}".format(n.2) }} {{ "{:>7}".format(n.3) }} 3       {{ "{:>10}".format(a.a) }}    {{ "{:>10}".format(a.b) }}    {{ "{:>10}".format(a.c) }}    {{ "{:>10}".format(a.d) }}    {{ "{:>10}".format(a.e) }}    {{ "{:>10}".format(a.f) }}
+{%- endfor %}
+
+
+
+
+
+

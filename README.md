@@ -2,7 +2,12 @@
 
 [![DOI](https://zenodo.org/badge/673091646.svg)](https://zenodo.org/badge/latestdoi/673091646)
 
-simple undirected graph representation for molecules and more...
+Simple undirected graph representation for molecules and more:
+
+Generates all relevant information about a molecule or the graph of a molecule based on a simple string representation. 
+Allows information to be mapped onto the graph to create topologies and other input files, apply force fields to molecular coordinates, determine surrogate model parameters, use group contribution theories and ensures reproducibility.
+The aim of this very flexible tool is to be able to write code about molecules without having to worry about the molecules themselves, because moleculegraph takes care of that.
+
 
 Online documentation is available at [maxfleck.github.io/moleculegraph](https://maxfleck.github.io/moleculegraph/moleculegraph.html)
 

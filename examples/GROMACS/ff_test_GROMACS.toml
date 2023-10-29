@@ -213,6 +213,14 @@ cth = 327.85824
 name = "[H][C_end][H]"
 style = "harmonic"
 
+[angles."[H_C_mid][C_mid][H_C_mid]"]
+funct = 1
+theta = 109.55005
+cth = 327.85824
+name = "[H_C_mid][C_mid][H_C_mid]"
+style = "harmonic"
+
+
 [dihedrals."[C_end][C_mid][C_end][H]"]
 func = 3
 a = 0.65084

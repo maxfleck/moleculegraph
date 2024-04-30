@@ -4,6 +4,7 @@ import json
 import networkx as nx
 import matplotlib.pyplot as plt
 from rdkit import Chem
+import re
 
 """
 functions to treat moleculestring:

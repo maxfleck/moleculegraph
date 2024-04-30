@@ -21,8 +21,8 @@ def get_syntax_from_numbers(mol_array,
       by a number giving the size
     """
     n=0
-    ff = np.zeros(len(mol))
-    nn = -1 * np.ones(len(mol))
+    ff = np.zeros(len(mol_array))
+    nn = -1 * np.ones(len(mol_array))
     for i,m in enumerate( mol_array ):
         if re.sub(r"\d+","", m) in branch_operators:
             ff[i] = int(re.sub("[^0-9]","", m ))

@@ -41,10 +41,8 @@ class molecule:
     
     """
 
-    def __init__(self, mol, 
-                 branch_operators=["b"], ring_operators=["r"],
+    def __init__(self, molstring, splitter=split_molstring, get_syntax=get_syntax_from_numbers,
                  branch_point_to_last=False, ring_point_to_first=False,
-                 min_ring_size=2, max_branch_size=np.inf
                 ):
         """
         initializes molecules based on graph-list representation.
@@ -63,6 +61,14 @@ class molecule:
         Parameters:
         - mol:
             - string representation of a molecule.
+        - branch_point_to_last:
+            - boolean, False 
+            - comes into play when branch points outside molecule
+            - if True branch will point to last atom
+        - ring_point_to_first:
+            - boolean, False
+            - comes into play when ring points outside molecule
+            - if True ring will point to first atom
         
         Returns:
             nothing
@@ -70,54 +76,25 @@ class molecule:
         
         self.branch_point_to_last= branch_point_to_last
         self.ring_point_to_first = ring_point_to_first
-        self.branch_operators = branch_operators
-        self.ring_operators = ring_operators
-        self.min_ring_size = min_ring_size
         
-        self.molstring = mol
-        if isinstance(mol, str):
-            mol = mol[1:-1].split("][")
-        else: # add more opts???
-            mol = mol[1:-1].split("][")
-            
-        self.molecule = np.array(mol)
+        mol = splitter(molstring)
+        self.molecule = splitter(molstring)
         """array representation of the molecule i.e. all keys/words/whatever in a list"""
-        self.f = np.zeros(len(mol))  # shows function
+        
+        syntactic_elements = get_syntax(mol)
+        
+        self.f = syntactic_elements[0]  # shows function
         """array with all functions. 
         - branches pointing forward f > 0
         - rings pointing backward f < 0
         - beads without function f = 0
         """
-        self.n = -1 * np.ones(len(mol))  # shows atomnumber
+        self.n = syntactic_elements[1]  # shows atomnumber
         """array with atom numbers. branches and rings n = -1 as they are no atoms"""        
         self.i = np.arange(len(mol))  # shows index
         """array with indexes. atoms, branches and rings get an index"""         
         self.len = len(self.i)
         """number of all elements i.e. atoms, branches and rings"""       
-        n = 0
-        idx_delete = []
-        for i, m in enumerate(mol):
-            if re.sub(r"\d+","", m) in branch_operators:
-                branch_size = int(re.sub("[^0-9]","", m ))
-                if branch_size <= max_branch_size:
-                    self.f[i] = branch_size
-                else:
-                    idx_delete.append(i)
-                    print( "branch_size exceeds max_branch_size",m )
-            elif re.sub(r"\d+","", m) in ring_operators:
-                ring_size = int(re.sub("[^0-9]","",m ))
-                if ring_size > min_ring_size:
-                    self.f[i] = -ring_size
-                else:
-                    idx_delete.append(i)
-                    print( "ring_size below min_ring_size",m )
-            else:
-                self.n[i] = n
-                n += 1
-        if idx_delete:
-            idx_delete = np.array(idx_delete)
-            stringlist = np.delete(mol, idx_delete)
-            self.reinit_mol( make_graph(stringlist) )
 
         # contains indexes of atoms
         # index of atom no n: self.atom_indexes[n]
@@ -751,3 +728,34 @@ class molecule:
         else:
             print("one bead only")
         return
+    
+    
+"""
+functions to treat moleculestring:
+"""
+def split_molstring(molstring):
+    return molstring[1:-1].split("][")
+
+
+def get_syntax_from_numbers(mol_array, 
+                            branch_operators=["b"], 
+                            ring_operators=["r"]):
+    """
+    - gets syntactic elemnts from a splitted molstring
+    - rings and brances are marked with letters followed
+      by a number giving the size
+    """
+    n=0
+    ff = np.zeros(len(mol))
+    nn = -1 * np.ones(len(mol))
+    for i,m in enumerate( mol_array ):
+        if re.sub(r"\d+","", m) in branch_operators:
+            ff[i] = int(re.sub("[^0-9]","", m ))
+        elif re.sub(r"\d+","", m) in ring_operators:
+            ff[i] = -int(re.sub("[^0-9]","", m ))
+        else:
+            nn[i] = n
+            n+=1
+    return ff ,nn
+        
+    

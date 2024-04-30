@@ -10,7 +10,7 @@ import re
 functions to treat moleculestring:
 """
 def split_molstring(molstring):
-    return molstring[1:-1].split("][")
+    return np.array(molstring[1:-1].split("]["))
 
 
 def get_syntax_from_numbers(mol_array, 
@@ -32,7 +32,7 @@ def get_syntax_from_numbers(mol_array,
         else:
             nn[i] = n
             n+=1
-    return ff ,nn
+    return ff.astype(int) ,nn.astype(int)
 
 """
 collection of functions needed by the molecule class.

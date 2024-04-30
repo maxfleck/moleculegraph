@@ -77,19 +77,19 @@ class molecule:
         self.branch_point_to_last= branch_point_to_last
         self.ring_point_to_first = ring_point_to_first
         
-        mol = splitter(molstring)
-        self.molecule = splitter(molstring)
+        mol           = np.array( splitter(molstring) )
+        self.molecule = np.array( splitter(molstring) )
         """array representation of the molecule i.e. all keys/words/whatever in a list"""
         
         syntactic_elements = get_syntax(mol)
         
-        self.f = syntactic_elements[0]  # shows function
+        self.f = np.array( syntactic_elements[0] ).astype(int)  # shows function
         """array with all functions. 
         - branches pointing forward f > 0
         - rings pointing backward f < 0
         - beads without function f = 0
         """
-        self.n = syntactic_elements[1]  # shows atomnumber
+        self.n = np.array( syntactic_elements[1] ).astype(int)  # shows atomnumber
         """array with atom numbers. branches and rings n = -1 as they are no atoms"""        
         self.i = np.arange(len(mol))  # shows index
         """array with indexes. atoms, branches and rings get an index"""         

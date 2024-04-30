@@ -6,6 +6,34 @@ import matplotlib.pyplot as plt
 from rdkit import Chem
 
 """
+functions to treat moleculestring:
+"""
+def split_molstring(molstring):
+    return molstring[1:-1].split("][")
+
+
+def get_syntax_from_numbers(mol_array, 
+                            branch_operators=["b"], 
+                            ring_operators=["r"]):
+    """
+    - gets syntactic elemnts from a splitted molstring
+    - rings and brances are marked with letters followed
+      by a number giving the size
+    """
+    n=0
+    ff = np.zeros(len(mol))
+    nn = -1 * np.ones(len(mol))
+    for i,m in enumerate( mol_array ):
+        if re.sub(r"\d+","", m) in branch_operators:
+            ff[i] = int(re.sub("[^0-9]","", m ))
+        elif re.sub(r"\d+","", m) in ring_operators:
+            ff[i] = -int(re.sub("[^0-9]","", m ))
+        else:
+            nn[i] = n
+            n+=1
+    return ff ,nn
+
+"""
 collection of functions needed by the molecule class.
 
 - sorting functionalities
@@ -14,7 +42,7 @@ collection of functions needed by the molecule class.
 - smiles interfacing
 - tools to generate equivalent graphstrings
 
-"""
+"""      
 
 def sort_force_fields(x):
     """

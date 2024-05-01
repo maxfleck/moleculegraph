@@ -45,4 +45,7 @@ jobs:
     - name: build your documentation into docs
       run: |
         pdoc moleculegraph/ -o docs/
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: docs/
 

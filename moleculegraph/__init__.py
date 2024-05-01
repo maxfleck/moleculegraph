@@ -71,12 +71,12 @@ class molecule:
               syntactic/semantic elements
             - returns two np.arrays:
                 -ff: functions array
-                  - branches pointing forward f > 0
-                  - rings pointing backward f < 0
-                  - beads without function f = 0 
+                    - branches pointing forward f > 0
+                    - rings pointing backward f < 0
+                    - beads without function f = 0 
                 -nn: atoms array:
-                  - contains atom numbers
-                  - functions are -1
+                    - contains atom numbers
+                    - functions are -1
             - default: get_syntax_from_numbers from molecule_utils   
             - you can pass your own function :)
         - branch_point_to_last:

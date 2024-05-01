@@ -61,6 +61,24 @@ class molecule:
         Parameters:
         - mol:
             - string representation of a molecule.
+        - splitter:
+            - function that splits input into syntactic/semantic elements
+            - returns np.array with all elements
+            - default: split_molstring from molecule_utils
+            - you can pass your own function :)
+        - get_syntax:
+            - function that generates atom and functional descriptors from 
+              syntactic/semantic elements
+            - returns two np.arrays:
+                -ff: functions array
+                    - branches pointing forward f > 0
+                    - rings pointing backward f < 0
+                    - beads without function f = 0 
+                -nn: atoms array:
+                    - contains atom numbers
+                    - functions are -1
+            - default: get_syntax_from_numbers from molecule_utils   
+            - you can pass your own function :)
         - branch_point_to_last:
             - boolean, False 
             - comes into play when branch points outside molecule

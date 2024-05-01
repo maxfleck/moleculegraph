@@ -3,6 +3,7 @@ dist/
 *egg*
 ###tests/
 devel*
+utils_devel*
 skizzen/
 .ipynb_checkpoints/
 *__pycache__*

@@ -93,7 +93,9 @@ class molecule:
         """
         
         self.branch_point_to_last= branch_point_to_last
+        """boolean if True branch that points outside molecule will point to last atom"""
         self.ring_point_to_first = ring_point_to_first
+        """boolean if True ring that points outside molecule will point to first atom"""
         
         mol           = np.array( splitter(molstring) )
         self.molecule = np.array( splitter(molstring) )

@@ -29,6 +29,15 @@ jobs:
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         pip install -I .
+      # ADJUST THIS: install all dependencies (including pdoc)
+      - run: pip install pdoc
+      # ADJUST THIS: build your documentation into docs/.
+      # We use a custom build script for pdoc itself, ideally you just run `pdoc -o docs/ ...` here.
+      - run: pdoc ./moleculegraph/ -o ./docs/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/        
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
